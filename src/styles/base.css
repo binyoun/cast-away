@@ -1,0 +1,98 @@
+/* base.css — variables, reset, typography */
+
+:root {
+  --bg:       #faf8f4;
+  --surface:  #f0ece4;
+  --surface2: #e8e3d8;
+  --ink:      #1a1814;
+  --ink80:    rgba(26,24,20,.8);
+  --ink60:    rgba(26,24,20,.6);
+  --ink40:    rgba(26,24,20,.4);
+  --ink20:    rgba(26,24,20,.2);
+  --ink10:    rgba(26,24,20,.1);
+  --ink06:    rgba(26,24,20,.06);
+  --border:   rgba(26,24,20,.1);
+
+  --amber:    #d4894a;
+  --amber-bg: rgba(212,137,74,.08);
+  --amber-border: rgba(212,137,74,.25);
+  --slate:    #4a6d8c;
+  --slate-bg: rgba(74,109,140,.08);
+  --slate-border: rgba(74,109,140,.25);
+  --tension:  #c0432a;
+  --tension-bg: rgba(192,67,42,.06);
+  --resolve:  #4a8c6a;
+  --resolve-bg: rgba(74,140,106,.08);
+  --resolve-border: rgba(74,140,106,.25);
+
+  --heading: 'Space Grotesk', sans-serif;
+  --mono:    'JetBrains Mono', monospace;
+  --body:    'Outfit', sans-serif;
+
+  --radius-sm: 8px;
+  --radius:    14px;
+  --radius-lg: 20px;
+  --shadow:    0 2px 12px rgba(26,24,20,.06), 0 1px 3px rgba(26,24,20,.04);
+  --shadow-md: 0 8px 32px rgba(26,24,20,.10), 0 2px 8px rgba(26,24,20,.06);
+}
+
+*, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+html { scroll-behavior: smooth; font-size: 15px; }
+
+body {
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--body);
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  overflow-x: hidden;
+}
+
+::selection { background: rgba(212,137,74,.18); color: var(--ink); }
+
+::-webkit-scrollbar { width: 4px; }
+::-webkit-scrollbar-track { background: transparent; }
+::-webkit-scrollbar-thumb { background: var(--amber-border); border-radius: 2px; }
+
+/* Scroll reveal */
+.rv {
+  opacity: 0;
+  transform: translateY(20px);
+  transition: opacity .7s ease, transform .7s ease;
+}
+.rv.vis { opacity: 1; transform: translateY(0); }
+
+@media (prefers-reduced-motion: reduce) {
+  .rv { opacity: 1; transform: none; }
+}
+
+h1, h2, h3, h4 { font-family: var(--heading); line-height: 1.2; }
+h1 { font-size: clamp(2.4rem, 5vw, 4rem); font-weight: 700; letter-spacing: -.02em; }
+h2 { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 600; letter-spacing: -.015em; }
+h3 { font-size: clamp(1.1rem, 2vw, 1.35rem); font-weight: 600; letter-spacing: -.01em; }
+h4 { font-size: .8rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
+
+p { font-size: 1rem; line-height: 1.7; color: var(--ink80); }
+
+.label {
+  font-family: var(--mono);
+  font-size: .7rem;
+  font-weight: 500;
+  letter-spacing: .1em;
+  text-transform: uppercase;
+  color: var(--ink40);
+}
+
+.chip {
+  display: inline-block;
+  font-family: var(--mono);
+  font-size: .68rem;
+  font-weight: 500;
+  letter-spacing: .04em;
+  padding: 3px 10px;
+  border-radius: 20px;
+  border: 1px solid var(--border);
+  background: var(--surface);
+  color: var(--ink60);
+}
