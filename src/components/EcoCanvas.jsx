@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import { NODES, LAYERS, getConnections } from "../data/ecosystem.js";
 
 // ---- Map background zones ----
@@ -32,10 +32,56 @@ function MapBackground({ layer, avgIntensity }) {
   );
 }
 
-// ---- Map legend ----
-function MapLegend({ layer }) {
+// ---- Compass rose ----
+function Compass({ onClick }) {
   return (
-    <div className="map-legend">
+    <div
+      className="compass-wrap"
+      onClick={onClick}
+      role="button"
+      tabIndex={0}
+      aria-label="Toggle map legend"
+      onKeyDown={e => e.key === 'Enter' && onClick()}
+    >
+      <svg viewBox="0 0 60 60" className="compass-svg" aria-hidden="true">
+        {/* Outer ring */}
+        <circle cx="30" cy="30" r="27" fill="rgba(46,95,120,.72)" stroke="rgba(255,255,255,.28)" strokeWidth="1.2"/>
+        {/* Degree ticks */}
+        {[0,45,90,135,180,225,270,315].map(deg => {
+          const rad = (deg - 90) * Math.PI / 180;
+          const r1 = 22, r2 = deg % 90 === 0 ? 18 : 20;
+          return (
+            <line key={deg}
+              x1={30 + r1 * Math.cos(rad)} y1={30 + r1 * Math.sin(rad)}
+              x2={30 + r2 * Math.cos(rad)} y2={30 + r2 * Math.sin(rad)}
+              stroke="rgba(255,255,255,.3)" strokeWidth={deg % 90 === 0 ? 1.5 : 1}
+            />
+          );
+        })}
+        {/* North arrow — amber */}
+        <path d="M30 8 L33.5 28 L30 25 L26.5 28 Z" fill="var(--amber)" opacity=".95"/>
+        {/* South arrow */}
+        <path d="M30 52 L33.5 32 L30 35 L26.5 32 Z" fill="rgba(255,255,255,.38)"/>
+        {/* East arrow */}
+        <path d="M52 30 L32 33.5 L35 30 L32 26.5 Z" fill="rgba(255,255,255,.38)"/>
+        {/* West arrow */}
+        <path d="M8 30 L28 33.5 L25 30 L28 26.5 Z" fill="rgba(255,255,255,.38)"/>
+        {/* Center circles */}
+        <circle cx="30" cy="30" r="4"   fill="var(--ocean-deep)"/>
+        <circle cx="30" cy="30" r="2.2" fill="var(--amber)"/>
+        {/* N label */}
+        <text x="30" y="5.5" textAnchor="middle" fontSize="5.5" fontWeight="bold"
+          fill="var(--amber)" fontFamily="sans-serif" opacity=".9">N</text>
+      </svg>
+    </div>
+  );
+}
+
+// ---- Map legend ----
+function MapLegend({ layer, visible }) {
+  return (
+    <div className={`map-legend${visible ? ' legend-visible' : ''}`}>
+      <span className="legend-title">Map Key</span>
       <div className="legend-item">
         <span className="legend-shape legend-circle" />
         <span>Character</span>
@@ -74,7 +120,7 @@ function Node({ nodeId, x, y, layer, activeSolutions, activeNode, onNodeClick, o
     : {};
 
   const glowStyle = isSolution && intensity > 40
-    ? { boxShadow: `0 0 ${Math.round(t * 28)}px rgba(58,122,86,${(t * 0.5).toFixed(2)})` }
+    ? { boxShadow: `0 0 ${Math.round(t * 32)}px rgba(58,122,86,${(t * 0.6).toFixed(2)}), 0 4px 18px rgba(0,0,0,.35)` }
     : {};
 
   function handleClick(e) {
@@ -128,7 +174,7 @@ function Node({ nodeId, x, y, layer, activeSolutions, activeNode, onNodeClick, o
 }
 
 // ---- Info panel ----
-function InfoPanel({ nodeId, layer, activeSolutions, onSetIntensity, onClose }) {
+function InfoPanel({ nodeId, layer, activeSolutions, onSetIntensity, onClose, style }) {
   const def  = NODES[nodeId];
   if (!def)  return null;
   const info = def.info;
@@ -137,7 +183,7 @@ function InfoPanel({ nodeId, layer, activeSolutions, onSetIntensity, onClose }) 
   const intensity  = isSolution ? activeSolutions[solveIdx] : 0;
 
   return (
-    <aside className="info-panel" onClick={e => e.stopPropagation()}>
+    <aside className="info-panel" style={style} onClick={e => e.stopPropagation()}>
       <button className="info-close" onClick={onClose}>×</button>
       <span className={`info-type-tag type-${def.color}`}>{info.type}</span>
       <h3 className="info-title">{info.title}</h3>
@@ -180,6 +226,8 @@ function InfoPanel({ nodeId, layer, activeSolutions, onSetIntensity, onClose }) 
 
 // ---- Main canvas ----
 export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSolutions, onSetIntensity }) {
+  const [showLegend, setShowLegend] = useState(false);
+
   const config = LAYERS[layer];
   const avg    = activeSolutions.reduce((a, b) => a + b, 0) / 3; // 0–100
 
@@ -192,6 +240,7 @@ export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSoluti
 
   function handleCanvasClick() {
     if (activeNode) onNodeClick(activeNode);
+    setShowLegend(false);
   }
 
   // Resolve dynamic positions for Linh/Khoa
@@ -200,6 +249,21 @@ export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSoluti
     if (id === 'khoa') return { ...base, x: khoaX };
     return base;
   }
+
+  // Position-aware InfoPanel: flip side based on node's x position
+  const activePos = activeNode
+    ? posFor(activeNode, config.nodePositions.find(p => p.id === activeNode) || { x: 50, y: 50 })
+    : null;
+
+  const infoPanelStyle = activePos
+    ? {
+        top: '50%',
+        transform: 'translateY(-50%)',
+        ...(activePos.x < 52
+          ? { left: `calc(${activePos.x}% + 56px)`, right: 'auto' }
+          : { right: `calc(${100 - activePos.x}% + 56px)`, left: 'auto' })
+      }
+    : { right: '20px', top: '50%', transform: 'translateY(-50%)' };
 
   return (
     <div className="eco-canvas" onClick={handleCanvasClick}>
@@ -222,9 +286,9 @@ export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSoluti
             return (
               <path
                 key={i} d={d} fill="none"
-                stroke={t > 0.04 ? 'var(--resolve)' : 'var(--ink20)'}
-                strokeOpacity={0.07 + t * 0.78}
-                strokeWidth={0.4 + t * 1.6}
+                stroke={t > 0.04 ? 'var(--resolve-mid)' : 'rgba(255,255,255,.15)'}
+                strokeOpacity={0.1 + t * 0.75}
+                strokeWidth={0.4 + t * 1.8}
                 strokeDasharray={dashArr}
                 style={{ transition: 'stroke-opacity .12s ease, stroke-width .12s ease, stroke .2s ease' }}
               />
@@ -268,7 +332,9 @@ export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSoluti
         })}
       </div>
 
-      <MapLegend layer={layer} />
+      {/* Compass (bottom-right) + legend popup */}
+      <Compass onClick={e => { e.stopPropagation?.(); setShowLegend(s => !s); }} />
+      <MapLegend layer={layer} visible={showLegend} />
 
       {activeNode && (
         <InfoPanel
@@ -278,6 +344,7 @@ export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSoluti
           activeSolutions={activeSolutions}
           onSetIntensity={onSetIntensity}
           onClose={() => onNodeClick(activeNode)}
+          style={infoPanelStyle}
         />
       )}
     </div>

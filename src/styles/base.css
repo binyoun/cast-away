@@ -1,31 +1,50 @@
-/* base.css */
-:root {
-  --bg:          #f5f2eb;
-  --canvas-bg:   #f0ece2;
-  --surface:     #e8e3d8;
-  --surface2:    #ddd7c8;
-  --card:        #ffffff;
-  --ink:         #1a1814;
-  --ink80:       rgba(26,24,20,.8);
-  --ink60:       rgba(26,24,20,.6);
-  --ink40:       rgba(26,24,20,.4);
-  --ink20:       rgba(26,24,20,.2);
-  --ink10:       rgba(26,24,20,.1);
+/* base.css — map-themed tokens */
 
-  --amber:       #c97d38;
-  --amber-light: #f5e6d3;
-  --amber-mid:   #dba870;
-  --amber-dark:  #7a4a1e;
-  --slate:       #3d6080;
-  --slate-light: #d4e2ec;
-  --slate-mid:   #7ca8c8;
-  --slate-dark:  #1e3a52;
-  --resolve:     #3a7a56;
-  --resolve-bg:  #e8f5ee;
-  --resolve-mid: #7ab896;
-  --tension:     #b83a24;
-  --tension-bg:  #fdf0ed;
-  --tension-mid: #e07860;
+:root {
+  /* Ocean + land palette */
+  --ocean:        #4a7f9a;
+  --ocean-deep:   #2e5f78;
+  --ocean-light:  #6fa8bf;
+  --ocean-shore:  rgba(74,127,154,.4);
+
+  --land-amber:   #b8925a;      /* academic island — warm sand/earth */
+  --land-amber2:  #9a7442;
+  --land-amber-shore: rgba(184,146,90,.35);
+
+  --land-slate:   #5a8870;      /* industry island — sage/forest */
+  --land-slate2:  #3d6a55;
+  --land-slate-shore: rgba(90,136,112,.35);
+
+  --ink:          #1a1814;
+  --ink80:        rgba(26,24,20,.8);
+  --ink60:        rgba(26,24,20,.6);
+  --ink40:        rgba(26,24,20,.4);
+  --ink20:        rgba(26,24,20,.2);
+  --ink10:        rgba(26,24,20,.1);
+
+  /* Accent */
+  --amber:        #c97d38;
+  --amber-light:  #f5e6d3;
+  --amber-mid:    #dba870;
+  --amber-dark:   #7a4a1e;
+
+  /* Tension / resolve */
+  --tension:      #c0432a;
+  --tension-bg:   #fdf0ed;
+  --tension-mid:  #e07860;
+  --resolve:      #3a7a56;
+  --resolve-bg:   #e8f5ee;
+  --resolve-mid:  #7ab896;
+  --resolve-light:#c2e8d2;
+
+  /* Industry node colour — sage/forest, unifies with land-slate island */
+  --slate:       #5a8870;
+  --slate-light: rgba(90,136,112,.18);
+  --slate-dark:  #3d6a55;
+
+  --surface:  #f0ebe0;
+  --surface2: #e4ddd0;
+  --card:     #faf8f4;
 
   --heading: 'Space Grotesk', sans-serif;
   --body:    'Outfit', sans-serif;
@@ -35,20 +54,19 @@
   --r-md: 14px;
   --r-lg: 22px;
   --r-xl: 28px;
-  --shadow:      0 4px 20px rgba(26,24,20,.08), 0 1px 4px rgba(26,24,20,.04);
-  --shadow-up:   0 12px 40px rgba(26,24,20,.14), 0 2px 8px rgba(26,24,20,.06);
+  --shadow-card: 0 4px 20px rgba(0,0,0,.18), 0 1px 4px rgba(0,0,0,.1);
+  --shadow-float: 0 12px 40px rgba(0,0,0,.28), 0 2px 8px rgba(0,0,0,.12);
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-html, body, #root { height: 100%; overflow: hidden; }
+html, body, #root      { height: 100%; overflow: hidden; }
 
 body {
-  background: var(--canvas-bg);
+  background: var(--ocean);
   font-family: var(--body);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   color: var(--ink);
 }
 
-::selection { background: var(--amber-light); color: var(--amber-dark); }
+::selection { background: rgba(201,125,56,.3); color: #fff; }
