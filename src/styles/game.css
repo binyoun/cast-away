@@ -137,6 +137,7 @@
   align-items: center;
   justify-content: flex-end;
   padding-bottom: 20px;
+  gap: 2px;
 }
 
 /* Academic island — warm amber/sand */
@@ -231,7 +232,96 @@
   white-space: nowrap;
 }
 
-/* Bridge emerging overlay */
+/* ---- Concept note (replaces watermark) ---- */
+.concept-note {
+  position: absolute;
+  top: 18px;
+  left: 50%;
+  transform: translateX(-50%);
+  display: flex;
+  align-items: flex-start;
+  gap: 7px;
+  background: rgba(255,255,255,.07);
+  border: 1px solid rgba(255,255,255,.12);
+  border-radius: 12px;
+  padding: 8px 14px;
+  max-width: 220px;
+  text-align: left;
+  pointer-events: none;
+  z-index: 4;
+}
+
+.concept-anchor {
+  font-size: .9rem;
+  flex-shrink: 0;
+  margin-top: 1px;
+}
+
+.concept-text {
+  font-size: .67rem;
+  color: rgba(255,255,255,.65);
+  line-height: 1.55;
+}
+
+.concept-text em {
+  color: rgba(255,255,255,.45);
+  font-style: italic;
+}
+
+/* ---- Island icon in zone header ---- */
+.island-icon {
+  width: 28px;
+  height: 28px;
+  margin-bottom: 4px;
+  opacity: .55;
+  flex-shrink: 0;
+}
+
+/* Zone sublabel */
+.zone-sublabel {
+  font-size: .58rem;
+  letter-spacing: .06em;
+  margin-top: 2px;
+  opacity: .5;
+}
+.zone-academic .zone-sublabel { color: var(--land-amber); }
+.zone-industry .zone-sublabel { color: var(--land-slate); }
+
+/* ---- Sailing ship ---- */
+.ship-container {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 2;
+}
+
+.ship-wake-svg {
+  position: absolute;
+  top: calc(44% + 8px);
+  left: 0;
+  width: 100%;
+  height: 20px;
+}
+
+.ship-wrap {
+  position: absolute;
+  top: 42%;
+  transform: translate(-50%, -50%);
+  width: 48px;
+  transition: left .7s cubic-bezier(.25,.46,.45,.94);
+  animation: shipBob 3.2s ease-in-out infinite;
+}
+
+.ship-svg {
+  width: 100%;
+  filter: drop-shadow(0 3px 8px rgba(0,0,0,.35));
+}
+
+.ship-arrived .ship-svg {
+  filter: drop-shadow(0 0 12px rgba(201,125,56,.6)) drop-shadow(0 3px 8px rgba(0,0,0,.35));
+}
+
+/* ---- Bridge emerging overlay ---- */
 .bridge-emerging {
   position: absolute;
   top: 30%;
@@ -661,6 +751,126 @@
   margin-top: 5px;
 }
 
+/* ---- Final outcome panel ---- */
+.final-outcome {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  right: 0;
+  z-index: 20;
+  max-height: 0;
+  overflow: hidden;
+  transition: max-height .6s cubic-bezier(.25,.46,.45,.94);
+}
+
+.final-outcome.final-visible {
+  max-height: 160px;
+}
+
+.final-inner {
+  display: flex;
+  align-items: center;
+  gap: 20px;
+  padding: 16px 28px;
+  background: linear-gradient(90deg,
+    rgba(30,70,56,.92) 0%,
+    rgba(46,95,120,.92) 50%,
+    rgba(30,70,56,.92) 100%);
+  backdrop-filter: blur(12px);
+  border-top: 1px solid rgba(122,184,150,.35);
+  box-shadow: 0 -8px 40px rgba(0,0,0,.35);
+}
+
+.final-left {
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  min-width: 170px;
+}
+
+.final-badge {
+  font-family: var(--mono);
+  font-size: .62rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .1em;
+  color: var(--amber);
+  background: rgba(201,125,56,.18);
+  border: 1px solid rgba(201,125,56,.3);
+  padding: 3px 10px;
+  border-radius: 100px;
+  width: fit-content;
+}
+
+.final-title {
+  font-family: var(--heading);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--resolve-light);
+  letter-spacing: -.02em;
+  line-height: 1;
+}
+
+.final-meta {
+  font-size: .68rem;
+  color: rgba(255,255,255,.45);
+  font-family: var(--mono);
+}
+
+.final-quote {
+  flex: 1;
+  font-size: .78rem;
+  font-style: italic;
+  color: rgba(255,255,255,.75);
+  line-height: 1.55;
+  border-left: 3px solid rgba(122,184,150,.5);
+  padding-left: 14px;
+}
+
+.final-quote cite {
+  display: block;
+  font-style: normal;
+  font-size: .67rem;
+  color: rgba(255,255,255,.4);
+  margin-top: 5px;
+}
+
+.final-chips {
+  display: flex;
+  flex-direction: column;
+  gap: 5px;
+  min-width: 200px;
+}
+
+.final-chip {
+  display: flex;
+  align-items: center;
+  gap: 7px;
+  font-size: .72rem;
+  color: rgba(255,255,255,.8);
+}
+
+.final-chip-check {
+  width: 16px;
+  height: 16px;
+  border-radius: 50%;
+  background: var(--resolve);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: .6rem;
+  color: #fff;
+  flex-shrink: 0;
+}
+
+.final-chip-pct {
+  margin-left: auto;
+  font-family: var(--mono);
+  font-size: .65rem;
+  color: var(--resolve-light);
+  font-weight: 700;
+}
+
 @media (max-width: 768px) {
   .layer-nav { padding: 0 14px; }
   .nav-layer-sub, .nav-brand-sub { display: none; }
@@ -671,4 +881,7 @@
   .node-letter  { font-size: 1.1rem; }
   .info-panel   { width: 230px; }
   .compass-wrap { width: 50px; height: 50px; }
+  .final-inner  { flex-wrap: wrap; gap: 10px; padding: 12px 16px; }
+  .final-chips  { display: none; }
+  .final-quote  { display: none; }
 }

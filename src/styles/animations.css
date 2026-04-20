@@ -30,3 +30,9 @@
   33%       { transform: rotate(3deg) translateY(-1px); }
   66%       { transform: rotate(-2deg) translateY(1px); }
 }
+
+@keyframes shipBob {
+  0%, 100% { transform: translate(-50%, -50%) rotate(0deg); }
+  25%       { transform: translate(-50%, calc(-50% - 3px)) rotate(.8deg); }
+  75%       { transform: translate(-50%, calc(-50% + 2px)) rotate(-.6deg); }
+}
