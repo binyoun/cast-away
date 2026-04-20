@@ -25,10 +25,10 @@ const CONCEPT_CONTENT = {
   2: { icon: '⚓', text: <>Three solutions clear the path.<br /><em>Can Linh sail to Industry Hub?</em></> },
 };
 
-function ConceptNote({ layer }) {
+function ConceptNote({ layer, topPct }) {
   const { icon, text } = CONCEPT_CONTENT[layer] || CONCEPT_CONTENT[2];
   return (
-    <div className="concept-note" aria-label="Layer context">
+    <div className="concept-note" style={topPct !== undefined ? { top: `${topPct}%` } : undefined} aria-label="Layer context">
       <span className="concept-anchor">{icon}</span>
       <span className="concept-text">{text}</span>
     </div>
@@ -153,7 +153,7 @@ function MapBackground({ layer, avgIntensity, activeSolutions, isComplete }) {
       {/* Ocean gap */}
       <div className="zone zone-gap">
         <span className="zone-ocean-label">Digital Media Ocean</span>
-        <ConceptNote layer={layer} />
+        <ConceptNote layer={layer} topPct={layer === 1 ? 65 : 10} />
         {showStorm && <StormOverlay />}
         {isComplete && (
           <div className="ocean-sun-wrap" aria-hidden="true">
@@ -548,8 +548,8 @@ export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSoluti
   }
 
   function posFor(id, base) {
-    if (id === 'linh') return { ...base, x: linhX };
-    if (id === 'tom')  return { ...base, x: tomX };
+    if (id === 'linh') return { ...base, x: linhX, y: 40 };
+    if (id === 'tom')  return { ...base, x: tomX,  y: 40 };
     return base;
   }
 
