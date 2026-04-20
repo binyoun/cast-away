@@ -3,9 +3,9 @@ import LayerNav from "./components/LayerNav.jsx";
 import EcoCanvas from "./components/EcoCanvas.jsx";
 
 export default function App() {
-  const [layer, setLayer]                   = useState(1);
-  const [activeNode, setActiveNode]         = useState(null);
-  const [activeSolutions, setActiveSolutions] = useState([0, 0, 0]); // 0–100 intensity
+  const [layer, setLayer]                     = useState(1);
+  const [activeNode, setActiveNode]           = useState(null);
+  const [activeSolutions, setActiveSolutions] = useState([0, 0, 0]);
 
   function handleLayerChange(l) {
     setLayer(l);

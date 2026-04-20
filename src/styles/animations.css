@@ -6,30 +6,21 @@
 }
 
 @keyframes nodesIn {
-  from { opacity: 0; transform: scale(.96); }
+  from { opacity: 0; transform: scale(.97); }
   to   { opacity: 1; transform: scale(1); }
 }
 
 @keyframes slideInRight {
-  from { opacity: 0; transform: translateY(-50%) translateX(16px); }
+  from { opacity: 0; transform: translateY(-50%) translateX(14px); }
   to   { opacity: 1; transform: translateY(-50%) translateX(0); }
 }
 
-@keyframes revealUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
+@keyframes tensionPulse {
+  from { stroke-opacity: 0; }
+  to   { stroke-opacity: .55; }
 }
 
-@keyframes blink {
-  0%, 100% { opacity: 1; }
-  50%       { opacity: 0.3; }
+@keyframes glowPulse {
+  0%, 100% { transform: scale(1);    opacity: .7; }
+  50%       { transform: scale(1.2); opacity: 1;  }
 }
-
-/* Tension connections pulse when layer 2 is first shown */
-@keyframes connPulse {
-  0%   { stroke-opacity: 0; }
-  50%  { stroke-opacity: .7; }
-  100% { stroke-opacity: .55; }
-}
-
-.conn-tension { animation: connPulse .6s ease .2s both; }
