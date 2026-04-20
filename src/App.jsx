@@ -5,7 +5,7 @@ import EcoCanvas from "./components/EcoCanvas.jsx";
 export default function App() {
   const [layer, setLayer]                   = useState(1);
   const [activeNode, setActiveNode]         = useState(null);
-  const [activeSolutions, setActiveSolutions] = useState([false, false, false]);
+  const [activeSolutions, setActiveSolutions] = useState([0, 0, 0]); // 0–100 intensity
 
   function handleLayerChange(l) {
     setLayer(l);
@@ -16,10 +16,10 @@ export default function App() {
     setActiveNode(prev => (prev === id ? null : id));
   }
 
-  function handleToggleSolution(i) {
+  function handleSetIntensity(i, value) {
     setActiveSolutions(prev => {
       const next = [...prev];
-      next[i] = !next[i];
+      next[i] = value;
       return next;
     });
   }
@@ -36,7 +36,7 @@ export default function App() {
         activeNode={activeNode}
         onNodeClick={handleNodeClick}
         activeSolutions={activeSolutions}
-        onToggleSolution={handleToggleSolution}
+        onSetIntensity={handleSetIntensity}
       />
     </div>
   );

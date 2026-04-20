@@ -195,13 +195,14 @@ export function getConnections(layerId, activeSolutions) {
         { from: L(88,50), to: L(50,82), color: 'tension', dash: false },
       ];
     case 3:
+      // activeSolutions are 0–100 intensity values
       return [
-        { from: L(12,50), to: L(50,18), color: activeSolutions[0] ? 'resolve' : 'muted', dash: !activeSolutions[0] },
-        { from: L(12,50), to: L(50,50), color: activeSolutions[1] ? 'resolve' : 'muted', dash: !activeSolutions[1] },
-        { from: L(12,50), to: L(50,82), color: activeSolutions[2] ? 'resolve' : 'muted', dash: !activeSolutions[2] },
-        { from: L(50,18), to: L(88,50), color: activeSolutions[0] ? 'resolve' : 'muted', dash: !activeSolutions[0] },
-        { from: L(50,50), to: L(88,50), color: activeSolutions[1] ? 'resolve' : 'muted', dash: !activeSolutions[1] },
-        { from: L(50,82), to: L(88,50), color: activeSolutions[2] ? 'resolve' : 'muted', dash: !activeSolutions[2] },
+        { from: L(12,50), to: L(50,18), intensity: activeSolutions[0], solveIdx: 0 },
+        { from: L(12,50), to: L(50,50), intensity: activeSolutions[1], solveIdx: 1 },
+        { from: L(12,50), to: L(50,82), intensity: activeSolutions[2], solveIdx: 2 },
+        { from: L(50,18), to: L(88,50), intensity: activeSolutions[0], solveIdx: 0 },
+        { from: L(50,50), to: L(88,50), intensity: activeSolutions[1], solveIdx: 1 },
+        { from: L(50,82), to: L(88,50), intensity: activeSolutions[2], solveIdx: 2 },
       ];
     case 4:
       return [

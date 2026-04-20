@@ -3,7 +3,8 @@ import React from "react";
 const LAYER_LABELS = ['Situation', 'Tensions', 'Solutions', 'Conclusions'];
 
 export default function LayerNav({ current, onChange, activeSolutions }) {
-  const solved = activeSolutions.filter(Boolean).length;
+  const active = activeSolutions.filter(v => v > 0).length;
+  const avgPct = Math.round(activeSolutions.reduce((a, b) => a + b, 0) / 3);
 
   return (
     <nav className="layer-nav">
@@ -27,8 +28,8 @@ export default function LayerNav({ current, onChange, activeSolutions }) {
 
       <div className="nav-meta">
         {current === 3 && (
-          <span className={`solve-counter${solved === 3 ? ' complete' : ''}`}>
-            {solved}/3 activated
+          <span className={`solve-counter${active === 3 && avgPct === 100 ? ' complete' : ''}`}>
+            {active}/3 active · avg {avgPct}%
           </span>
         )}
         {current !== 3 && (
