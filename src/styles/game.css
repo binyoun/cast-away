@@ -321,6 +321,42 @@
   filter: drop-shadow(0 0 12px rgba(201,125,56,.6)) drop-shadow(0 3px 8px rgba(0,0,0,.35));
 }
 
+/* ---- Storm overlay (layer 3) ---- */
+.storm-overlay {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  z-index: 3;
+  background: radial-gradient(
+    ellipse 70% 60% at 50% 50%,
+    rgba(192,67,42,.22) 0%,
+    rgba(192,67,42,.08) 55%,
+    transparent 80%
+  );
+  animation: stormPulse 3s ease-in-out infinite;
+}
+
+/* Dim the non-focus island zone */
+.zone-dim {
+  opacity: 0.3;
+  filter: grayscale(50%);
+  transition: opacity .4s ease, filter .4s ease;
+}
+
+/* Storm-specific gap label */
+.zone-gap-label-storm {
+  color: var(--tension-mid) !important;
+  border-color: rgba(192,67,42,.35) !important;
+  background: rgba(192,67,42,.14) !important;
+}
+
+/* Layer 3 nav button — tension tint when active */
+.nav-layer-btn-storm.active {
+  background: var(--tension);
+  border-color: var(--tension);
+  color: #fff;
+}
+
 /* ---- Bridge emerging overlay ---- */
 .bridge-emerging {
   position: absolute;

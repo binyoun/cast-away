@@ -1,55 +1,52 @@
 import React, { useState } from "react";
 import { NODES, LAYERS, getConnections } from "../data/ecosystem.js";
 
-// ---- Concept note (replaces distracting watermark) ----
-function ConceptNote() {
+// ---- Concept note (content varies per layer) ----
+const CONCEPT_CONTENT = {
+  1: { icon: '🏝', text: <><strong>Academic Island</strong><br /><em>Where Linh builds her beautiful ships in isolation.</em></> },
+  2: { icon: '🚢', text: <><strong>The Rescue Ship</strong><br /><em>Khoa's world is fast, blunt, and always client-first.</em></> },
+  3: { icon: '⛈', text: <><strong>The Storm</strong><br /><em>Linh freezes. Khoa pivots. The system breaks down.</em></> },
+  4: { icon: '⚓', text: <>Two islands. One gap. Three interventions.<br /><em>Can Linh bridge Academic and Industry worlds?</em></> },
+};
+
+function ConceptNote({ layer }) {
+  const { icon, text } = CONCEPT_CONTENT[layer] || CONCEPT_CONTENT[4];
   return (
-    <div className="concept-note" aria-label="Cast Away concept">
-      <span className="concept-anchor">⚓</span>
-      <span className="concept-text">
-        Two islands. One gap. Three interventions.<br />
-        <em>Can Linh bridge Academic and Industry worlds?</em>
-      </span>
+    <div className="concept-note" aria-label="Layer context">
+      <span className="concept-anchor">{icon}</span>
+      <span className="concept-text">{text}</span>
     </div>
   );
 }
 
-// ---- Sailing ship (layer 2 only) ----
+// ---- Storm overlay (layer 3) ----
+function StormOverlay() {
+  return <div className="storm-overlay" aria-hidden="true" />;
+}
+
+// ---- Sailing ship (layer 4 only) ----
 function Ship({ progress }) {
-  // sails from near academic shore (~32%) to near industry shore (~67%)
-  const shipX    = 32 + progress * 35;
-  const arrived  = progress >= 0.88;
-  const wakeEnd  = Math.max(32, shipX - 2.5);
+  const shipX   = 32 + progress * 35;
+  const arrived = progress >= 0.88;
+  const wakeEnd = Math.max(32, shipX - 2.5);
 
   return (
     <div className="ship-container" aria-hidden="true">
-      {/* Wake trail — SVG overlay */}
       <svg className="ship-wake-svg" viewBox="0 0 100 10" preserveAspectRatio="none">
         <path
           d={`M 32 5 Q ${(32 + wakeEnd) / 2} 3.5 ${wakeEnd} 5`}
           stroke="rgba(255,255,255,.18)" strokeWidth=".7"
           fill="none" strokeDasharray="1.4 2.2"
-          style={{ transition: 'd .5s ease' }}
         />
       </svg>
-      {/* Ship */}
-      <div
-        className={`ship-wrap${arrived ? ' ship-arrived' : ''}`}
-        style={{ left: `${shipX}%` }}
-      >
+      <div className={`ship-wrap${arrived ? ' ship-arrived' : ''}`} style={{ left: `${shipX}%` }}>
         <svg viewBox="0 0 50 34" className="ship-svg">
-          {/* Reflection */}
           <ellipse cx="25" cy="30" rx="16" ry="3" fill="rgba(255,255,255,.07)"/>
-          {/* Hull */}
           <path d="M7 17 L43 17 L39 26 L11 26 Z" fill="var(--amber)" opacity=".9"/>
           <path d="M11 21 L39 21 L37 26 L13 26 Z" fill="var(--amber-dark)" opacity=".25"/>
-          {/* Mast */}
           <line x1="25" y1="4" x2="25" y2="17" stroke="rgba(255,255,255,.7)" strokeWidth="1.3"/>
-          {/* Main sail */}
           <path d="M25 5 L39 14 L25 16.5 Z" fill="rgba(255,255,255,.78)"/>
-          {/* Forward sail */}
           <path d="M25 5 L13 14 L25 16.5 Z" fill="rgba(255,255,255,.5)"/>
-          {/* Flag */}
           <path d="M25 4 L32 6.5 L25 9 Z" fill="var(--amber)"/>
         </svg>
       </div>
@@ -59,13 +56,25 @@ function Ship({ progress }) {
 
 // ---- Map background zones ----
 function MapBackground({ layer, avgIntensity }) {
-  const showShip   = layer === 2;
-  const bridgeVis  = layer === 2 && avgIntensity >= 58;
+  const showShip  = layer === 4;
+  const showStorm = layer === 3;
+  const bridgeVis = layer === 4 && avgIntensity >= 58;
+
+  const gapLabel = {
+    1: 'The Ocean Gap',
+    2: 'The Ocean Gap',
+    3: 'The IPL Storm',
+    4: 'The IPL Gap',
+  }[layer];
+
+  // In layers 1 and 2 dim the "other" island
+  const dimAcademic = layer === 2;
+  const dimIndustry = layer === 1;
 
   return (
-    <div className="map-bg" aria-hidden="true">
+    <div className={`map-bg map-bg-layer-${layer}`} aria-hidden="true">
       {/* Academic Island */}
-      <div className="zone zone-academic">
+      <div className={`zone zone-academic${dimAcademic ? ' zone-dim' : ''}`}>
         <div className="island-icon island-icon-academic">
           <svg viewBox="0 0 24 24" fill="none">
             <path d="M4 20 L12 4 L20 20 Z" stroke="rgba(184,146,90,.6)" strokeWidth="1.5" fill="rgba(184,146,90,.12)"/>
@@ -73,17 +82,14 @@ function MapBackground({ layer, avgIntensity }) {
           </svg>
         </div>
         <span className="zone-label">Academic<br />Island</span>
-        <span className="zone-sublabel">Linh lives here</span>
+        <span className="zone-sublabel">{layer === 1 ? 'Linh lives here' : 'Academic Island'}</span>
       </div>
 
       {/* Ocean gap */}
       <div className="zone zone-gap">
-        <ConceptNote />
-
-        {/* Ship sailing across */}
-        {showShip && <Ship progress={avgIntensity / 100} />}
-
-        {/* Bridge emerging when solutions accumulate */}
+        <ConceptNote layer={layer} />
+        {showStorm && <StormOverlay />}
+        {showShip  && <Ship progress={avgIntensity / 100} />}
         {bridgeVis && (
           <div
             className="bridge-emerging"
@@ -97,12 +103,11 @@ function MapBackground({ layer, avgIntensity }) {
             </span>
           </div>
         )}
-
-        <span className="zone-gap-label">The IPL Gap</span>
+        <span className={`zone-gap-label${showStorm ? ' zone-gap-label-storm' : ''}`}>{gapLabel}</span>
       </div>
 
       {/* Industry Island */}
-      <div className="zone zone-industry">
+      <div className={`zone zone-industry${dimIndustry ? ' zone-dim' : ''}`}>
         <div className="island-icon island-icon-industry">
           <svg viewBox="0 0 24 24" fill="none">
             <rect x="5" y="8" width="14" height="12" stroke="rgba(90,136,112,.6)" strokeWidth="1.5" fill="rgba(90,136,112,.12)"/>
@@ -110,7 +115,7 @@ function MapBackground({ layer, avgIntensity }) {
           </svg>
         </div>
         <span className="zone-label">Industry<br />Island</span>
-        <span className="zone-sublabel">Khoa works here</span>
+        <span className="zone-sublabel">{layer === 2 ? 'Khoa works here' : 'Industry Island'}</span>
       </div>
     </div>
   );
@@ -122,8 +127,7 @@ function Compass({ onClick }) {
     <div
       className="compass-wrap"
       onClick={onClick}
-      role="button"
-      tabIndex={0}
+      role="button" tabIndex={0}
       aria-label="Toggle map legend"
       onKeyDown={e => e.key === 'Enter' && onClick()}
     >
@@ -140,9 +144,7 @@ function Compass({ onClick }) {
             />
           );
         })}
-        {/* North — amber */}
         <path d="M30 8 L33.5 28 L30 25 L26.5 28 Z" fill="var(--amber)" opacity=".95"/>
-        {/* S / E / W */}
         <path d="M30 52 L33.5 32 L30 35 L26.5 32 Z" fill="rgba(255,255,255,.38)"/>
         <path d="M52 30 L32 33.5 L35 30 L32 26.5 Z" fill="rgba(255,255,255,.38)"/>
         <path d="M8 30 L28 33.5 L25 30 L28 26.5 Z"  fill="rgba(255,255,255,.38)"/>
@@ -162,10 +164,10 @@ function MapLegend({ layer, visible }) {
       <span className="legend-title">Map Key</span>
       <div className="legend-item"><span className="legend-shape legend-circle"/><span>Character</span></div>
       <div className="legend-item"><span className="legend-shape legend-rect"  /><span>System</span></div>
-      {layer === 1 && (
-        <div className="legend-item"><span className="legend-shape legend-hex"    /><span>Tension</span></div>
+      {layer === 3 && (
+        <div className="legend-item"><span className="legend-shape legend-hex"/><span>Tension</span></div>
       )}
-      {layer === 2 && (
+      {layer === 4 && (
         <div className="legend-item"><span className="legend-shape legend-diamond"/><span>Intervention</span></div>
       )}
     </div>
@@ -204,7 +206,7 @@ function Node({ nodeId, x, y, layer, activeSolutions, activeNode, onNodeClick, o
         ))}
         <span className="node-sub">{def.sub}</span>
       </div>
-      {isSolution && layer === 2 && (
+      {isSolution && layer === 4 && (
         <div
           className="intensity-wrap"
           onClick={e => e.stopPropagation()}
@@ -239,7 +241,7 @@ function InfoPanel({ nodeId, layer, activeSolutions, onSetIntensity, onClose, st
       <button className="info-close" onClick={onClose}>×</button>
       <span className={`info-type-tag type-${def.color}`}>{info.type}</span>
       <h3 className="info-title">{info.title}</h3>
-      {info.role    && <p className="info-role">{info.role}</p>}
+      {info.role     && <p className="info-role">{info.role}</p>}
       {info.conflict && <p className="info-conflict">{info.conflict}</p>}
       {info.attrs?.length > 0 && (
         <ul className="info-attrs">
@@ -247,7 +249,7 @@ function InfoPanel({ nodeId, layer, activeSolutions, onSetIntensity, onClose, st
         </ul>
       )}
       {info.quote && <blockquote className="info-quote">"{info.quote}"</blockquote>}
-      {isSolution && layer === 2 && (
+      {isSolution && layer === 4 && (
         <div
           className="info-intensity-block"
           onMouseDown={e => e.stopPropagation()}
@@ -272,13 +274,13 @@ function InfoPanel({ nodeId, layer, activeSolutions, onSetIntensity, onClose, st
   );
 }
 
-// ---- Final outcome panel (slides up when bridge is complete) ----
+// ---- Final outcome panel (layer 4 only) ----
 function FinalOutcome({ activeSolutions, visible }) {
-  const pct = Math.round(activeSolutions.reduce((a, b) => a + b, 0) / 3);
+  const pct   = Math.round(activeSolutions.reduce((a, b) => a + b, 0) / 3);
   const items = [
-    { label: 'AI Prototyping Sprint',  idx: 0 },
-    { label: 'Shared Critique Boards', idx: 1 },
-    { label: 'M-NODE Hackathon',       idx: 2 },
+    { label: 'AI Prototyping Sprint',    idx: 0 },
+    { label: 'Shared Critique Boards',   idx: 1 },
+    { label: 'Cross-Cultural Hackathon', idx: 2 },
   ];
   return (
     <div className={`final-outcome${visible ? ' final-visible' : ''}`} aria-live="polite">
@@ -313,11 +315,12 @@ export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSoluti
   const config = LAYERS[layer];
   const avg    = activeSolutions.reduce((a, b) => a + b, 0) / 3;
   const drift  = (avg / 100) * 10;
-  const linhX  = layer === 2 ? 20 + drift : 20;
-  const khoaX  = layer === 2 ? 80 - drift : 80;
+  // Drift only in layer 4 (The Compass)
+  const linhX  = layer === 4 ? 20 + drift : 20;
+  const khoaX  = layer === 4 ? 80 - drift : 80;
 
   const allActive  = activeSolutions.filter(v => v > 0).length === 3;
-  const isComplete = layer === 2 && allActive && avg >= 78;
+  const isComplete = layer === 4 && allActive && avg >= 78;
 
   const connections = getConnections(layer, activeSolutions, linhX, khoaX);
 
@@ -332,7 +335,7 @@ export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSoluti
     return base;
   }
 
-  // Position-aware InfoPanel
+  // Position-aware InfoPanel: appear on the side of the canvas with more space
   const activePos = activeNode
     ? posFor(activeNode, config.nodePositions.find(p => p.id === activeNode) || { x: 50, y: 50 })
     : null;
@@ -345,6 +348,13 @@ export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSoluti
           : { right: `calc(${100 - activePos.x}% + 58px)`, left: 'auto' })
       }
     : { right: '20px', top: '50%', transform: 'translateY(-50%)' };
+
+  const layerBadgeLabels = {
+    1: '1 — The Island',
+    2: '2 — The Rescue Ship',
+    3: '3 — The Storm',
+    4: '4 — The Compass',
+  };
 
   return (
     <div className="eco-canvas" onClick={handleCanvasClick}>
@@ -377,9 +387,7 @@ export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSoluti
 
       {/* Canvas header */}
       <div className="canvas-header" key={`hdr-${layer}`}>
-        <span className="canvas-layer-badge">
-          {layer === 1 ? '1 — The Gap' : '2 — The Bridge'}
-        </span>
+        <span className="canvas-layer-badge">{layerBadgeLabels[layer]}</span>
         <span className="canvas-subtitle">{config.sub}</span>
       </div>
 
@@ -406,7 +414,7 @@ export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSoluti
       <Compass onClick={e => { e?.stopPropagation(); setShowLegend(s => !s); }} />
       <MapLegend layer={layer} visible={showLegend} />
 
-      {/* Resolution panel — bottom of canvas */}
+      {/* Resolution panel */}
       <FinalOutcome activeSolutions={activeSolutions} visible={isComplete} />
 
       {/* Info panel */}

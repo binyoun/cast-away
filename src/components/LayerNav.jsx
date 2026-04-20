@@ -1,8 +1,10 @@
 import React from "react";
 
 const LAYERS = [
-  { id: 1, label: 'The Gap',    sub: 'Situation + Tensions' },
-  { id: 2, label: 'The Bridge', sub: 'Solutions + Outcomes'  },
+  { id: 1, label: 'The Island',      sub: 'Linh\'s World'    },
+  { id: 2, label: 'The Rescue Ship', sub: 'Khoa\'s World'    },
+  { id: 3, label: 'The Storm',       sub: 'Critical Tension' },
+  { id: 4, label: 'The Compass',     sub: 'Interventions'    },
 ];
 
 export default function LayerNav({ current, onChange, activeSolutions }) {
@@ -20,7 +22,7 @@ export default function LayerNav({ current, onChange, activeSolutions }) {
         {LAYERS.map(l => (
           <button
             key={l.id}
-            className={`nav-layer-btn${current === l.id ? ' active' : ''}`}
+            className={`nav-layer-btn${current === l.id ? ' active' : ''}${l.id === 3 ? ' nav-layer-btn-storm' : ''}`}
             onClick={() => onChange(l.id)}
           >
             <span className="nav-layer-num">{l.id}</span>
@@ -31,7 +33,7 @@ export default function LayerNav({ current, onChange, activeSolutions }) {
       </div>
 
       <div className="nav-meta">
-        {current === 2 ? (
+        {current === 4 ? (
           <span className={`solve-counter${active === 3 && avg >= 90 ? ' complete' : ''}`}>
             {active}/3 interventions · {avg}% avg
           </span>
