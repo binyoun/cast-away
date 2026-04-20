@@ -2,7 +2,7 @@ import React from "react";
 
 const LAYERS = [
   { id: 1, label: 'The Gap',     sub: 'Situation & Tensions' },
-  { id: 2, label: 'The Compass', sub: 'Interventions'        },
+  { id: 2, label: 'The Compass', sub: 'Solutions'            },
 ];
 
 export default function LayerNav({ current, onChange, activeSolutions }) {
@@ -33,7 +33,7 @@ export default function LayerNav({ current, onChange, activeSolutions }) {
       <div className="nav-meta">
         {current === 2 ? (
           <span className={`solve-counter${active === 3 && avg >= 90 ? ' complete' : ''}`}>
-            {active}/3 interventions · {avg}% avg
+            {active}/3 solutions · {avg}% avg
           </span>
         ) : (
           <span className="nav-hint">Click any node to explore</span>

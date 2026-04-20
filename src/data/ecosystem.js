@@ -68,7 +68,7 @@ export const NODES = {
   },
   s1: {
     id: 's1', type: 'solution', shape: 'diamond', color: 'resolve',
-    letter: '✦', label: 'AI\nPrototyping', sub: 'Intervention 1',
+    letter: '✦', label: 'AI\nPrototyping', sub: 'Solution 1',
     resolves: 'storm', solveIndex: 0,
     info: {
       type: 'IPL Intervention', title: 'AI Prototyping Sprint',
@@ -84,7 +84,7 @@ export const NODES = {
   },
   s2: {
     id: 's2', type: 'solution', shape: 'diamond', color: 'resolve',
-    letter: '✦', label: 'Critique\nBoards', sub: 'Intervention 2',
+    letter: '✦', label: 'Critique\nBoards', sub: 'Solution 2',
     resolves: 'storm', solveIndex: 1,
     info: {
       type: 'IPL Intervention', title: 'Shared Critique Boards',
@@ -100,7 +100,7 @@ export const NODES = {
   },
   s3: {
     id: 's3', type: 'solution', shape: 'diamond', color: 'resolve',
-    letter: '✦', label: 'Cross-Cultural\nHackathon', sub: 'Intervention 3',
+    letter: '✦', label: 'Cross-Cultural\nHackathon', sub: 'Solution 3',
     resolves: 'storm', solveIndex: 2,
     info: {
       type: 'IPL Intervention', title: 'Cross-Cultural Hackathon',
@@ -130,7 +130,7 @@ export const LAYERS = {
   },
   2: {
     label: 'The Compass',
-    sub: 'IPL Interventions — drag sliders to apply',
+    sub: 'IPL Solutions — drag sliders to apply',
     nodePositions: [
       { id: 'linh', x: 15, y: 55 },
       { id: 's1',   x: 50, y: 16 },

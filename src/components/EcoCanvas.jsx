@@ -22,7 +22,7 @@ function lightningPath(x1, y1, x2, y2, segs = 7, amp = 2.5) {
 // ---- Concept note (content varies per layer) ----
 const CONCEPT_CONTENT = {
   1: { icon: '⛈', text: <><strong>Three storms block the crossing.</strong><br /><em>Linh's beautiful ship is stuck near Star Island.</em></> },
-  2: { icon: '⚓', text: <>Three interventions clear the path.<br /><em>Can Linh sail to Industry Hub?</em></> },
+  2: { icon: '⚓', text: <>Three solutions clear the path.<br /><em>Can Linh sail to Industry Hub?</em></> },
 };
 
 function ConceptNote({ layer }) {
@@ -50,8 +50,8 @@ function StormRipple({ x, y, onEnd }) {
   );
 }
 
-// ---- Sailing ship (both layers, stuck in layer 1) ----
-function Ship({ progress, stuck }) {
+// ---- Sailing ship ----
+function Ship({ progress, stuck, topPct = 42 }) {
   const shipX   = stuck ? 26 : 32 + progress * 35;
   const arrived = !stuck && progress >= 0.88;
   const wakeEnd = Math.max(32, shipX - 2.5);
@@ -59,7 +59,8 @@ function Ship({ progress, stuck }) {
   return (
     <div className="ship-container" aria-hidden="true">
       {!stuck && (
-        <svg className="ship-wake-svg" viewBox="0 0 100 10" preserveAspectRatio="none">
+        <svg className="ship-wake-svg" viewBox="0 0 100 10" preserveAspectRatio="none"
+          style={{ top: `calc(${topPct}% + 8px)` }}>
           <path
             d={`M 32 5 Q ${(32 + wakeEnd) / 2} 3.5 ${wakeEnd} 5`}
             stroke="rgba(255,255,255,.18)" strokeWidth=".7"
@@ -67,7 +68,8 @@ function Ship({ progress, stuck }) {
           />
         </svg>
       )}
-      <div className={`ship-wrap${arrived ? ' ship-arrived' : ''}${stuck ? ' ship-blocked' : ''}`} style={{ left: `${shipX}%` }}>
+      <div className={`ship-wrap${arrived ? ' ship-arrived' : ''}${stuck ? ' ship-blocked' : ''}`}
+        style={{ left: `${shipX}%`, top: `${topPct}%` }}>
         <svg viewBox="0 0 50 34" className="ship-svg">
           <ellipse cx="25" cy="30" rx="16" ry="3" fill="rgba(255,255,255,.07)"/>
           <path d="M7 17 L43 17 L39 26 L11 26 Z" fill="var(--amber)" opacity=".9"/>
@@ -84,11 +86,21 @@ function Ship({ progress, stuck }) {
 }
 
 // ---- Map background zones ----
-function MapBackground({ layer, avgIntensity }) {
-  const showStorm = layer === 1;
-  const bridgeVis = layer === 2 && avgIntensity >= 58;
+function MapBackground({ layer, avgIntensity, activeSolutions, isComplete }) {
+  const showStorm   = layer === 1;
+  const bridgeVis   = layer === 2 && avgIntensity >= 58;
+  const solsOver50  = layer === 2 ? activeSolutions.filter(v => v > 50).length : 0;
+  const shipCount   = layer === 1 ? 1 : Math.max(1, solsOver50);
+  const avgProgress = avgIntensity / 100;
 
-  const gapLabel = layer === 1 ? 'The IPL Storm' : 'The IPL Gap';
+  // Fleet positions: 3 ships at different vertical positions + staggered progress
+  const FLEET = [
+    { topPct: 42, offset: 0    },
+    { topPct: 36, offset: -0.06 },
+    { topPct: 48, offset: -0.11 },
+  ];
+
+  const gapLabel      = layer === 1 ? 'The IPL Storm' : 'The IPL Gap';
   const gapLabelStorm = layer === 1;
 
   return (
@@ -140,7 +152,37 @@ function MapBackground({ layer, avgIntensity }) {
         <span className="zone-ocean-label">Digital Media Ocean</span>
         <ConceptNote layer={layer} />
         {showStorm && <StormOverlay />}
-        <Ship progress={avgIntensity / 100} stuck={layer === 1} />
+        {isComplete && (
+          <div className="ocean-sun-wrap" aria-hidden="true">
+            <svg className="ocean-sun" viewBox="0 0 120 120" fill="none">
+              {[0,30,60,90,120,150,180,210,240,270,300,330].map(deg => {
+                const rad = deg * Math.PI / 180;
+                const r1 = 32, r2 = deg % 90 === 0 ? 50 : 43;
+                return (
+                  <line key={deg}
+                    x1={60 + r1 * Math.cos(rad)} y1={60 + r1 * Math.sin(rad)}
+                    x2={60 + r2 * Math.cos(rad)} y2={60 + r2 * Math.sin(rad)}
+                    stroke="rgba(255,210,80,.55)" strokeWidth={deg % 90 === 0 ? 3.5 : 2.2}
+                    strokeLinecap="round"
+                  />
+                );
+              })}
+              <circle cx="60" cy="60" r="24" fill="rgba(255,225,100,1)"/>
+              <circle cx="60" cy="60" r="15" fill="rgba(255,248,200,1)"/>
+            </svg>
+          </div>
+        )}
+        {layer === 1 ? (
+          <Ship progress={0} stuck={true} topPct={42} />
+        ) : (
+          FLEET.slice(0, shipCount).map((sd, i) => (
+            <Ship key={i}
+              progress={Math.max(0, avgProgress + sd.offset)}
+              stuck={false}
+              topPct={sd.topPct}
+            />
+          ))
+        )}
         {bridgeVis && (
           <div
             className="bridge-emerging"
@@ -261,7 +303,7 @@ function MapLegend({ layer, visible }) {
         <div className="legend-item"><span className="legend-shape legend-hex"/><span>Tension</span></div>
       )}
       {layer === 2 && (
-        <div className="legend-item"><span className="legend-shape legend-diamond"/><span>Intervention</span></div>
+        <div className="legend-item"><span className="legend-shape legend-diamond"/><span>Solution</span></div>
       )}
     </div>
   );
@@ -501,7 +543,7 @@ export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSoluti
 
   return (
     <div className="eco-canvas" onClick={handleCanvasClick}>
-      <MapBackground layer={layer} avgIntensity={avg} />
+      <MapBackground layer={layer} avgIntensity={avg} activeSolutions={activeSolutions} isComplete={isComplete} />
 
       {/* SVG connections */}
       <svg className="canvas-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
