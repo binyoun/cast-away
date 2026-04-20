@@ -17,12 +17,12 @@ export const NODES = {
       quote: 'I spent three weeks on this. It\'s the most technically refined thing I\'ve ever made.'
     }
   },
-  khoa: {
-    id: 'khoa', type: 'char', shape: 'circle', color: 'slate',
-    letter: 'K', label: 'Khoa', sub: 'Creative Director',
+  tom: {
+    id: 'tom', type: 'char', shape: 'circle', color: 'slate',
+    letter: 'T', label: 'Tom', sub: 'Creative Director',
     info: {
-      type: 'Character', title: 'Khoa',
-      role: 'Creative Director, fast-paced digital agency',
+      type: 'Character', title: 'Tom',
+      role: 'Creative Director, VFX & Game Agency — HCMC, mid-size, outsourcing',
       attrs: [
         'Needs AI-ready "jack of all trades" designers',
         'Small agile teams — no bandwidth to mentor emotional reactions',
@@ -33,67 +33,37 @@ export const NODES = {
       quote: 'We need someone who can jump between decks, reels, and prototypes in the same afternoon.'
     }
   },
-  academic: {
-    id: 'academic', type: 'system', shape: 'rect', color: 'amber',
-    letter: '⬡', label: 'Academic', sub: 'University system',
-    info: {
-      type: 'System', title: 'Academic System',
-      role: 'University curriculum & culture',
-      attrs: [
-        'Deep craft emphasis',
-        'Process-driven assessment',
-        'Studio critique culture',
-        'Semester-long projects'
-      ],
-      quote: ''
-    }
-  },
-  industry: {
-    id: 'industry', type: 'system', shape: 'rect', color: 'slate',
-    letter: '⬡', label: 'Industry', sub: 'Agency ecosystem',
-    info: {
-      type: 'System', title: 'Industry',
-      role: 'Creative agency ecosystem',
-      attrs: [
-        'Sprint-based delivery',
-        'Multi-format versatility',
-        'Client-facing daily',
-        'Ships fast, iterates often'
-      ],
-      quote: ''
-    }
-  },
   t1: {
     id: 't1', type: 'tension', shape: 'hex', color: 'tension',
-    letter: '⚡', label: 'Storm 1\nDepth vs Range', sub: 'Tension 1',
+    letter: '⚡', label: 'Storm 1\nThe Velocity Gap', sub: 'Pacing & Time',
     info: {
-      type: 'Storm', title: 'Storm 1 — Depth vs Range',
-      role: 'Specialist craft vs Jack-of-all-trades',
-      conflict: 'Linh\'s 3D craft impresses tutors but Khoa needs someone who covers more ground. Her "Beautiful Ship" took 3 weeks — that burns an entire project budget.',
+      type: 'Storm', title: 'Storm 1 — The Velocity Gap',
+      role: 'Academic incubation vs industry sprint velocity',
+      conflict: 'Academic curriculum is built on semester-long timelines and perfectionism. HCMC agencies need multi-format mockups in 48 hours. Linh freezes when asked to compress a 12-week perfectionist workflow into a 3-day client sprint.',
       attrs: [],
-      quote: 'If it takes three weeks per asset, we\'d burn through the budget on one social post.'
+      quote: 'We need a first draft by Friday. They came back asking if we could extend the deadline by two weeks.'
     }
   },
   t2: {
     id: 't2', type: 'tension', shape: 'hex', color: 'tension',
-    letter: '⚡', label: 'Storm 2\nVision vs Velocity', sub: 'Tension 2',
+    letter: '⚡', label: 'Storm 2\nThe Agility Gap', sub: 'Role & Adaptability',
     info: {
-      type: 'Storm', title: 'Storm 2 — Vision vs Velocity',
-      role: 'Concept-led creativity vs client-first speed',
-      conflict: 'Linh pitches concept-led work and can\'t separate her identity from the artwork. Khoa\'s clients want brand compliance and recall metrics — not artistic vision.',
+      type: 'Storm', title: 'Storm 2 — The Agility Gap',
+      role: 'Deep specialization vs multi-format versatility',
+      conflict: 'RMIT rewards deep technical specialization — Linh spent three years as a hyper-focused 3D motion expert. Tom\'s agency needs an AI-ready jack-of-all-trades who bridges 3D, 2D layouts, and copywriting on the fly.',
       attrs: [],
-      quote: 'They don\'t care about the concept. They care if the logo reads at 80px on a phone.'
+      quote: 'We don\'t need a 3D expert. We need someone who can use AI to switch between any format within the same day.'
     }
   },
   t3: {
     id: 't3', type: 'tension', shape: 'hex', color: 'tension',
-    letter: '⚡', label: 'Storm 3\nCraft vs Pressure', sub: 'Tension 3',
+    letter: '⚡', label: 'Storm 3\nThe Beautiful Ship Gap', sub: 'Evaluation Focus',
     info: {
-      type: 'Storm', title: 'Storm 3 — Craft vs Pressure',
-      role: 'Academic pacing vs agency velocity',
-      conflict: 'Linh\'s programme rewarded careful revision. Khoa\'s agency runs on compressed timelines. When Khoa delivers blunt feedback, Linh freezes — the system breaks down.',
+      type: 'Storm', title: 'Storm 3 — The "Beautiful Ship" Gap',
+      role: 'Artistic purity vs client-centric conversion',
+      conflict: 'Studio critique culture validates work by aesthetic beauty and concept. Tom\'s clients evaluate purely on business outcomes and conversion metrics. When feedback prioritizes function over beauty, Linh takes it personally — ego barriers emerge instead of rapid problem-solving.',
       attrs: [],
-      quote: 'We had an intern who couldn\'t ship without three rounds of sign-off. We couldn\'t keep them.'
+      quote: 'If it takes three weeks per asset and the client still hates it, we\'ve burned the budget twice.'
     }
   },
   s1: {
@@ -151,26 +121,22 @@ export const LAYERS = {
     label: 'The Gap',
     sub: 'Situation & Tensions — click nodes to explore',
     nodePositions: [
-      { id: 'academic', x: 10, y: 20 },
-      { id: 'linh',     x: 20, y: 55 },
-      { id: 't1',       x: 50, y: 16 },
-      { id: 't2',       x: 50, y: 50 },
-      { id: 't3',       x: 50, y: 83 },
-      { id: 'khoa',     x: 80, y: 55 },
-      { id: 'industry', x: 90, y: 20 },
+      { id: 'linh', x: 20, y: 55 },
+      { id: 't1',   x: 50, y: 16 },
+      { id: 't2',   x: 50, y: 50 },
+      { id: 't3',   x: 50, y: 83 },
+      { id: 'tom',  x: 80, y: 55 },
     ]
   },
   2: {
     label: 'The Compass',
     sub: 'IPL Interventions — drag sliders to apply',
     nodePositions: [
-      { id: 'academic', x: 10, y: 20 },
-      { id: 'linh',     x: 20, y: 55 }, // dynamic x via avgIntensity
-      { id: 's1',       x: 50, y: 16 },
-      { id: 's2',       x: 50, y: 50 },
-      { id: 's3',       x: 50, y: 83 },
-      { id: 'khoa',     x: 80, y: 55 }, // dynamic x via avgIntensity
-      { id: 'industry', x: 90, y: 20 },
+      { id: 'linh', x: 20, y: 55 },
+      { id: 's1',   x: 50, y: 16 },
+      { id: 's2',   x: 50, y: 50 },
+      { id: 's3',   x: 50, y: 83 },
+      { id: 'tom',  x: 80, y: 55 },
     ]
   }
 };
@@ -179,10 +145,10 @@ function cp(ax, ay, bx, by, bow = 6) {
   return { x: (ax + bx) / 2, y: (ay + by) / 2 - bow };
 }
 
-export function getConnections(layerId, activeSolutions, linhX = 20, khoaX = 80) {
-  const lY = 55, kY = 55;
+export function getConnections(layerId, activeSolutions, linhX = 20, tomX = 80) {
+  const lY = 55, tY = 55;
 
-  // Layer 1: amber + slate + 6 tension lines (linh/khoa → t1, t2, t3)
+  // Layer 1: amber + slate + 6 tension lines (linh/tom → t1, t2, t3)
   if (layerId === 1) {
     return [
       { from:{x:10,y:20}, to:{x:20,y:55},  cp: cp(10,20,20,55,4),  color:'amber',   dash:false },
@@ -196,7 +162,7 @@ export function getConnections(layerId, activeSolutions, linhX = 20, khoaX = 80)
     ];
   }
 
-  // Layer 2: amber + slate + 6 intensity paths (dynamic linhX/khoaX)
+  // Layer 2: amber + slate + 6 intensity paths (dynamic linhX/tomX)
   if (layerId === 2) {
     const make = (sx, sy, idx) => {
       const t = activeSolutions[idx] / 100;
@@ -208,15 +174,15 @@ export function getConnections(layerId, activeSolutions, linhX = 20, khoaX = 80)
           intensity: activeSolutions[idx], solveIdx: idx
         },
         {
-          from: {x:sx,y:sy}, to: {x:khoaX,y:kY},
-          cp: cp(sx,sy,khoaX,kY,bow),
+          from: {x:sx,y:sy}, to: {x:tomX,y:tY},
+          cp: cp(sx,sy,tomX,tY,bow),
           intensity: activeSolutions[idx], solveIdx: idx
         },
       ];
     };
     return [
       { from: {x:10,y:20}, to: {x:linhX,y:lY}, cp: cp(10,20,linhX,lY,4), color: 'amber', dash: false },
-      { from: {x:90,y:20}, to: {x:khoaX,y:kY}, cp: cp(90,20,khoaX,kY,4), color: 'slate', dash: false },
+      { from: {x:90,y:20}, to: {x:tomX,y:tY},  cp: cp(90,20,tomX,tY,4),  color: 'slate', dash: false },
       ...make(50,16,0),
       ...make(50,50,1),
       ...make(50,83,2),

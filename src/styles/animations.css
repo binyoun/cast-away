@@ -48,6 +48,12 @@
   to   { width: 200px; height: 200px; opacity: 0;   }
 }
 
+/* Fast boat drift in Industry Hub */
+@keyframes fastBoatDrift {
+  0%,100% { transform: translateX(0); }
+  50%      { transform: translateX(5px); }
+}
+
 /* Node burst on storm click */
 @keyframes stormBurst {
   0%   { transform: scale(1);    filter: brightness(1); }

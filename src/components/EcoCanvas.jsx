@@ -3,8 +3,8 @@ import { NODES, LAYERS, getConnections } from "../data/ecosystem.js";
 
 // ---- Concept note (content varies per layer) ----
 const CONCEPT_CONTENT = {
-  1: { icon: '⛈', text: <><strong>Three storms block the way.</strong><br /><em>Linh's ship is stuck at the Academic Island.</em></> },
-  2: { icon: '⚓', text: <>Three interventions clear the path.<br /><em>Can Linh escape the island?</em></> },
+  1: { icon: '⛈', text: <><strong>Three storms block the crossing.</strong><br /><em>Linh's beautiful ship is stuck near Star Island.</em></> },
+  2: { icon: '⚓', text: <>Three interventions clear the path.<br /><em>Can Linh sail to Industry Hub?</em></> },
 };
 
 function ConceptNote({ layer }) {
@@ -59,6 +59,7 @@ function Ship({ progress, stuck }) {
           <path d="M25 5 L13 14 L25 16.5 Z" fill="rgba(255,255,255,.5)"/>
           <path d="M25 4 L32 6.5 L25 9 Z" fill="var(--amber)"/>
         </svg>
+        {stuck && <div className="ship-label">Linh's Ship</div>}
       </div>
     </div>
   );
@@ -74,20 +75,26 @@ function MapBackground({ layer, avgIntensity }) {
 
   return (
     <div className={`map-bg map-bg-layer-${layer}`} aria-hidden="true">
-      {/* Academic Island — always full opacity */}
+      {/* Star Island */}
       <div className="zone zone-academic">
         <div className="island-icon island-icon-academic">
           <svg viewBox="0 0 24 24" fill="none">
-            <path d="M4 20 L12 4 L20 20 Z" stroke="rgba(184,146,90,.6)" strokeWidth="1.5" fill="rgba(184,146,90,.12)"/>
-            <path d="M7 15 L17 15" stroke="rgba(184,146,90,.4)" strokeWidth="1"/>
+            <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
+              stroke="rgba(184,146,90,.6)" strokeWidth="1.2" fill="rgba(184,146,90,.12)"/>
           </svg>
         </div>
-        <span className="zone-label">Academic<br />Island</span>
-        <span className="zone-sublabel">Academic Island</span>
+        <span className="zone-label">Star Island</span>
+        <span className="zone-sublabel">Digital Media · SCD, RMIT</span>
+        <div className="zone-info">
+          <span>⏱ Semester-long timelines</span>
+          <span>🎨 Deep craft specialisation</span>
+          <span>⭐ Artistic &amp; conceptual evaluation</span>
+        </div>
       </div>
 
       {/* Ocean gap */}
       <div className="zone zone-gap">
+        <span className="zone-ocean-label">Digital Media Ocean</span>
         <ConceptNote layer={layer} />
         {showStorm && <StormOverlay />}
         <Ship progress={avgIntensity / 100} stuck={layer === 1} />
@@ -107,7 +114,7 @@ function MapBackground({ layer, avgIntensity }) {
         <span className={`zone-gap-label${gapLabelStorm ? ' zone-gap-label-storm' : ''}`}>{gapLabel}</span>
       </div>
 
-      {/* Industry Island — always full opacity */}
+      {/* Industry Hub */}
       <div className="zone zone-industry">
         <div className="island-icon island-icon-industry">
           <svg viewBox="0 0 24 24" fill="none">
@@ -115,8 +122,18 @@ function MapBackground({ layer, avgIntensity }) {
             <path d="M3 8 L12 3 L21 8" stroke="rgba(90,136,112,.5)" strokeWidth="1.5" fill="none"/>
           </svg>
         </div>
-        <span className="zone-label">Industry<br />Island</span>
-        <span className="zone-sublabel">Industry Island</span>
+        <span className="zone-label">Industry Hub</span>
+        <span className="zone-sublabel">VFX &amp; Game · HCMC · Outsourcing</span>
+        <div className="zone-info">
+          <span>⚡ 48h–1 week sprints</span>
+          <span>🔀 Multi-format versatility</span>
+          <span>📊 Client conversion metrics</span>
+        </div>
+        <div className="fast-boats" aria-hidden="true">
+          <span className="fast-boat fb1">🚤</span>
+          <span className="fast-boat fb2">🚤</span>
+          <span className="fast-boat fb3">🚤</span>
+        </div>
       </div>
     </div>
   );
@@ -164,7 +181,6 @@ function MapLegend({ layer, visible }) {
     <div className={`map-legend${visible ? ' legend-visible' : ''}`}>
       <span className="legend-title">Map Key</span>
       <div className="legend-item"><span className="legend-shape legend-circle"/><span>Character</span></div>
-      <div className="legend-item"><span className="legend-shape legend-rect"  /><span>System</span></div>
       {layer === 1 && (
         <div className="legend-item"><span className="legend-shape legend-hex"/><span>Tension</span></div>
       )}
@@ -293,7 +309,7 @@ function FinalOutcome({ activeSolutions, visible }) {
         </div>
         <blockquote className="final-quote">
           "Understood. If we use AI to quickly re-render, I can have mockups by end of day."
-          <cite>— Linh, responding to Khoa's brief</cite>
+          <cite>— Linh, responding to Tom's brief</cite>
         </blockquote>
         <div className="final-chips">
           {items.map(({ label, idx }) => (
@@ -319,12 +335,12 @@ export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSoluti
   const drift  = (avg / 100) * 10;
   // Drift only in layer 2 (The Compass)
   const linhX  = layer === 2 ? 20 + drift : 20;
-  const khoaX  = layer === 2 ? 80 - drift : 80;
+  const tomX   = layer === 2 ? 80 - drift : 80;
 
   const allActive  = activeSolutions.filter(v => v > 0).length === 3;
   const isComplete = layer === 2 && allActive && avg >= 78;
 
-  const connections = getConnections(layer, activeSolutions, linhX, khoaX);
+  const connections = getConnections(layer, activeSolutions, linhX, tomX);
 
   function handleCanvasClick() {
     if (activeNode) onNodeClick(activeNode);
@@ -345,7 +361,7 @@ export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSoluti
 
   function posFor(id, base) {
     if (id === 'linh') return { ...base, x: linhX };
-    if (id === 'khoa') return { ...base, x: khoaX };
+    if (id === 'tom')  return { ...base, x: tomX };
     return base;
   }
 
@@ -362,11 +378,6 @@ export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSoluti
           : { right: `calc(${100 - activePos.x}% + 58px)`, left: 'auto' })
       }
     : { right: '20px', top: '50%', transform: 'translateY(-50%)' };
-
-  const layerBadgeLabels = {
-    1: '1 — The Gap',
-    2: '2 — The Compass',
-  };
 
   return (
     <div className="eco-canvas" onClick={handleCanvasClick}>
@@ -396,12 +407,6 @@ export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSoluti
           );
         })}
       </svg>
-
-      {/* Canvas header */}
-      <div className="canvas-header" key={`hdr-${layer}`}>
-        <span className="canvas-layer-badge">{layerBadgeLabels[layer]}</span>
-        <span className="canvas-subtitle">{config.sub}</span>
-      </div>
 
       {/* Nodes */}
       <div key={`nl-${layer}`} className="nodes-layer">

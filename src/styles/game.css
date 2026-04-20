@@ -483,37 +483,60 @@
   margin-bottom: 4px;
 }
 
-/* ---- Canvas header ---- */
-.canvas-header {
+/* ---- Zone info (always-visible island system summary) ---- */
+.zone-info {
+  display: flex;
+  flex-direction: column;
+  gap: 3px;
+  margin-top: 8px;
+  padding: 0 4px;
+  font-size: .58rem;
+  line-height: 1.5;
+  pointer-events: none;
+}
+.zone-academic .zone-info { color: rgba(184,146,90,.65); }
+.zone-industry .zone-info { color: rgba(90,136,112,.65); }
+
+/* ---- Ocean label in gap zone ---- */
+.zone-ocean-label {
   position: absolute;
-  top: 20px;
+  top: 8px;
   left: 50%;
   transform: translateX(-50%);
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  z-index: 10;
-  animation: fadeIn .4s ease both;
-  white-space: nowrap;
-}
-
-.canvas-layer-badge {
   font-family: var(--mono);
-  font-size: .68rem;
-  font-weight: 600;
-  letter-spacing: .08em;
+  font-size: .58rem;
+  letter-spacing: .1em;
   text-transform: uppercase;
-  color: var(--amber);
-  background: rgba(201,125,56,.18);
-  border: 1px solid rgba(201,125,56,.3);
-  padding: 4px 12px;
-  border-radius: 100px;
+  color: rgba(255,255,255,.18);
+  white-space: nowrap;
+  pointer-events: none;
+  z-index: 2;
 }
 
-.canvas-subtitle {
-  font-size: .78rem;
-  color: rgba(255,255,255,.55);
-  font-weight: 500;
+/* ---- Fast boats in Industry Hub ---- */
+.fast-boats {
+  display: flex;
+  gap: 4px;
+  margin-top: 8px;
+  opacity: .5;
+}
+.fast-boat {
+  font-size: .85rem;
+  animation: fastBoatDrift 1.6s ease-in-out infinite;
+}
+.fb1 { animation-delay: 0s; }
+.fb2 { animation-delay: .35s; }
+.fb3 { animation-delay: .7s; }
+
+/* ---- Ship label (shown when stuck) ---- */
+.ship-label {
+  font-size: .52rem;
+  color: rgba(255,210,80,.65);
+  font-family: var(--mono);
+  text-align: center;
+  margin-top: 2px;
+  white-space: nowrap;
+  pointer-events: none;
 }
 
 /* ---- SVG connections ---- */
