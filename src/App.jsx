@@ -1,88 +1,107 @@
-import React, { useState, useEffect } from "react";
+import React, { useState, useEffect, useCallback } from "react";
+import NavBar from "./components/NavBar.jsx";
+import HeroScene from "./components/HeroScene.jsx";
+import CharactersScene from "./components/CharactersScene.jsx";
+import TensionScene from "./components/TensionScene.jsx";
+import ResolutionScene from "./components/ResolutionScene.jsx";
 import { tensions } from "./data/scenario.js";
-import ProgressBar from "./components/ProgressBar.jsx";
-import HeroSection from "./components/HeroSection.jsx";
-import ProfileSplit from "./components/ProfileSplit.jsx";
-import TensionLayer from "./components/TensionLayer.jsx";
-import ResolutionSection from "./components/ResolutionSection.jsx";
-import Footer from "./components/Footer.jsx";
+
+// Scene order: hero → characters → tension×3 → resolution
+const TOTAL = 6;
 
 export default function App() {
+  const [scene, setScene] = useState(0);
   const [solved, setSolved] = useState([false, false, false]);
+  const [dir, setDir] = useState(1);
 
-  function handleSolve(index) {
-    setSolved((prev) => {
+  const tensionIndex = scene >= 2 && scene <= 4 ? scene - 2 : null;
+  const isTensionScene = tensionIndex !== null;
+  const sceneSolved = isTensionScene ? solved[tensionIndex] : false;
+
+  const canAdvance = useCallback(() => {
+    if (scene >= TOTAL - 1) return false;
+    if (isTensionScene) return sceneSolved;
+    return true;
+  }, [scene, isTensionScene, sceneSolved]);
+
+  const advance = useCallback(() => {
+    if (!canAdvance()) return;
+    setDir(1);
+    setScene(s => s + 1);
+  }, [canAdvance]);
+
+  const goBack = useCallback(() => {
+    if (scene === 0) return;
+    setDir(-1);
+    setScene(s => s - 1);
+  }, [scene]);
+
+  useEffect(() => {
+    function onKey(e) {
+      if (e.key === " " || e.key === "ArrowRight" || e.key === "Enter") {
+        e.preventDefault();
+        advance();
+      }
+      if (e.key === "ArrowLeft") goBack();
+    }
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [advance, goBack]);
+
+  function handleSolve(i) {
+    setSolved(prev => {
       const next = [...prev];
-      next[index] = true;
+      next[i] = true;
       return next;
     });
   }
 
-  // IntersectionObserver for .rv scroll reveal
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("vis");
-            obs.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.08, rootMargin: "0px 0px -30px 0px" }
-    );
-
-    const revealEls = document.querySelectorAll(".rv");
-    revealEls.forEach((el) => obs.observe(el));
-
-    return () => obs.disconnect();
-  }, []);
-
-  // Re-run observer when solved state changes (TransformPanel becomes visible)
-  useEffect(() => {
-    const obs = new IntersectionObserver(
-      (entries) => {
-        entries.forEach((entry) => {
-          if (entry.isIntersecting) {
-            entry.target.classList.add("vis");
-            obs.unobserve(entry.target);
-          }
-        });
-      },
-      { threshold: 0.08, rootMargin: "0px 0px -30px 0px" }
-    );
-
-    // Small delay to allow DOM to update after state change
-    const timer = setTimeout(() => {
-      document.querySelectorAll(".rv:not(.vis)").forEach((el) => obs.observe(el));
-    }, 100);
-
-    return () => {
-      clearTimeout(timer);
-      obs.disconnect();
-    };
-  }, [solved]);
-
-  const allSolved = solved.every(Boolean);
+  const sceneKey = `scene-${scene}`;
 
   return (
-    <>
-      <ProgressBar solved={solved} />
-      <main>
-        <HeroSection />
-        <ProfileSplit />
-        {tensions.map((tension, i) => (
-          <TensionLayer
-            key={tension.id}
-            index={i}
-            data={tension}
-            solved={solved[i]}
-            onSolve={() => handleSolve(i)}
-          />
-        ))}
-        <ResolutionSection allSolved={allSolved} />
-      </main>
-      <Footer />
-    </>
+    <div className="app">
+      {scene === 0 && <HeroScene key={sceneKey} />}
+      {scene === 1 && <CharactersScene key={sceneKey} />}
+      {scene === 2 && (
+        <TensionScene
+          key={sceneKey}
+          data={tensions[0]}
+          index={0}
+          solved={solved[0]}
+          onSolve={() => handleSolve(0)}
+        />
+      )}
+      {scene === 3 && (
+        <TensionScene
+          key={sceneKey}
+          data={tensions[1]}
+          index={1}
+          solved={solved[1]}
+          onSolve={() => handleSolve(1)}
+        />
+      )}
+      {scene === 4 && (
+        <TensionScene
+          key={sceneKey}
+          data={tensions[2]}
+          index={2}
+          solved={solved[2]}
+          onSolve={() => handleSolve(2)}
+        />
+      )}
+      {scene === 5 && (
+        <ResolutionScene key={sceneKey} solved={solved} />
+      )}
+
+      <NavBar
+        scene={scene}
+        total={TOTAL}
+        canAdvance={canAdvance()}
+        onAdvance={advance}
+        onBack={goBack}
+        isTension={isTensionScene}
+        sceneSolved={sceneSolved}
+      />
+    </div>
   );
 }

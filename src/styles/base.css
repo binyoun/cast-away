@@ -1,157 +1,52 @@
-/* base.css — variables, reset, typography */
+/* base.css */
 
 :root {
-  --bg:        #faf8f4;
-  --surface:   #f2ede3;
-  --surface2:  #e9e2d4;
-  --card-bg:   #ffffff;
-  --ink:       #1a1814;
-  --ink80:     rgba(26,24,20,.8);
-  --ink60:     rgba(26,24,20,.6);
-  --ink40:     rgba(26,24,20,.4);
-  --ink20:     rgba(26,24,20,.2);
-  --ink10:     rgba(26,24,20,.1);
-  --border:    rgba(26,24,20,.08);
+  --bg:          #faf8f4;
+  --surface:     #f0ebe0;
+  --surface2:    #e4ddd0;
+  --ink:         #1a1814;
+  --ink80:       rgba(26,24,20,.8);
+  --ink60:       rgba(26,24,20,.6);
+  --ink40:       rgba(26,24,20,.4);
+  --ink20:       rgba(26,24,20,.2);
+  --ink10:       rgba(26,24,20,.1);
 
   --amber:       #c97d38;
   --amber-light: #f5e6d3;
-  --amber-mid:   #e8c49a;
+  --amber-mid:   #dba870;
   --amber-dark:  #7a4a1e;
   --slate:       #3d6080;
   --slate-light: #d4e2ec;
-  --slate-mid:   #8bafc8;
+  --slate-mid:   #7ca8c8;
   --slate-dark:  #1e3a52;
-  --tension:     #b83a24;
-  --tension-bg:  #fdf0ed;
   --resolve:     #3a7a56;
   --resolve-bg:  #e8f5ee;
   --resolve-mid: #7ab896;
+  --tension:     #b83a24;
+  --tension-bg:  #fdf0ed;
 
   --heading: 'Space Grotesk', sans-serif;
-  --mono:    'JetBrains Mono', monospace;
   --body:    'Outfit', sans-serif;
-
-  --r-sm:   10px;
-  --r-md:   20px;
-  --r-lg:   28px;
-  --r-xl:   36px;
-  --shadow: 0 4px 24px rgba(26,24,20,.07), 0 1px 4px rgba(26,24,20,.04);
-  --shadow-lift: 0 12px 48px rgba(26,24,20,.12), 0 2px 8px rgba(26,24,20,.06);
+  --mono:    'JetBrains Mono', monospace;
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-html { scroll-behavior: smooth; font-size: 16px; }
+html, body {
+  height: 100%;
+  overflow: hidden;
+}
 
 body {
-  background: var(--bg);
-  color: var(--ink);
+  background: var(--ink);
   font-family: var(--body);
-  line-height: 1.65;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  color: var(--ink);
+}
+
+#root {
+  height: 100%;
 }
 
 ::selection { background: var(--amber-light); color: var(--amber-dark); }
-
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--amber-mid); border-radius: 2px; }
-
-/* Scroll reveal */
-.rv {
-  opacity: 0;
-  transform: translateY(24px);
-  transition: opacity .65s ease, transform .65s ease;
-}
-.rv.vis { opacity: 1; transform: translateY(0); }
-
-@media (prefers-reduced-motion: reduce) {
-  .rv { opacity: 1; transform: none; }
-}
-
-h1 {
-  font-family: var(--heading);
-  font-size: clamp(3rem, 6vw, 5rem);
-  font-weight: 700;
-  line-height: 1.05;
-  letter-spacing: -.03em;
-}
-
-h2 {
-  font-family: var(--heading);
-  font-size: clamp(1.75rem, 3.5vw, 2.75rem);
-  font-weight: 700;
-  line-height: 1.15;
-  letter-spacing: -.025em;
-}
-
-h3 {
-  font-family: var(--heading);
-  font-size: clamp(1.1rem, 2vw, 1.4rem);
-  font-weight: 600;
-  line-height: 1.25;
-  letter-spacing: -.015em;
-}
-
-p { font-size: 1rem; line-height: 1.75; color: var(--ink60); }
-
-.eyebrow {
-  font-family: var(--body);
-  font-size: .8rem;
-  font-weight: 500;
-  letter-spacing: .04em;
-  color: var(--amber);
-}
-
-.tag {
-  display: inline-flex;
-  align-items: center;
-  font-family: var(--body);
-  font-size: .78rem;
-  font-weight: 500;
-  padding: 6px 14px;
-  border-radius: 100px;
-}
-
-.tag-amber {
-  background: var(--amber-light);
-  color: var(--amber-dark);
-}
-
-.tag-slate {
-  background: var(--slate-light);
-  color: var(--slate-dark);
-}
-
-.tag-resolve {
-  background: var(--resolve-bg);
-  color: var(--resolve);
-}
-
-.tag-tension {
-  background: var(--tension-bg);
-  color: var(--tension);
-}
-
-.chip {
-  display: inline-flex;
-  align-items: center;
-  font-family: var(--body);
-  font-size: .8rem;
-  font-weight: 500;
-  padding: 5px 14px;
-  border-radius: 100px;
-  background: var(--surface);
-  color: var(--ink60);
-}
-
-.chip.before {
-  background: var(--tension-bg);
-  color: var(--tension);
-}
-
-.chip.after {
-  background: var(--resolve-bg);
-  color: var(--resolve);
-}

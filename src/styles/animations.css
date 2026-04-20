@@ -1,31 +1,45 @@
 /* animations.css */
 
-@keyframes fail-shake {
+@keyframes staggerIn {
+  from { opacity: 0; transform: translateY(20px); }
+  to   { opacity: 1; transform: translateY(0); }
+}
+
+@keyframes slideFromLeft {
+  from { opacity: 0; transform: translateX(-32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes slideFromRight {
+  from { opacity: 0; transform: translateX(32px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes revealUp {
+  from { opacity: 0; transform: translateY(16px) scale(.98); }
+  to   { opacity: 1; transform: translateY(0) scale(1); }
+}
+
+@keyframes failShake {
   0%   { transform: translateX(0); }
-  20%  { transform: translateX(-6px); }
-  40%  { transform: translateX(6px); }
-  60%  { transform: translateX(-4px); }
-  80%  { transform: translateX(4px); }
+  20%  { transform: translateX(-8px); }
+  40%  { transform: translateX(8px); }
+  60%  { transform: translateX(-5px); }
+  80%  { transform: translateX(5px); }
   100% { transform: translateX(0); }
 }
 
-@keyframes win-pulse {
-  0%   { box-shadow: 0 0 0 0 rgba(212,137,74,.4); }
-  50%  { box-shadow: 0 0 0 8px rgba(212,137,74,.0); }
-  100% { box-shadow: 0 0 0 0 rgba(212,137,74,.0); }
-}
-
-@keyframes draw-bridge {
+@keyframes drawBridge {
   from { width: 0; }
   to   { width: 100%; }
 }
 
-@keyframes bobDown {
-  0%,100% { transform: translateY(0); }
-  50%      { transform: translateY(4px); }
+@keyframes blink {
+  0%, 100% { opacity: 1; }
+  50%       { opacity: 0.3; }
 }
 
-@keyframes fadeSlideUp {
-  from { opacity: 0; transform: translateY(12px); }
-  to   { opacity: 1; transform: translateY(0); }
+@keyframes bobDown {
+  0%, 100% { transform: translateY(0); }
+  50%       { transform: translateY(5px); }
 }
