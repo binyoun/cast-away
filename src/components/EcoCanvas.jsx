@@ -1,6 +1,24 @@
 import React, { useState } from "react";
 import { NODES, LAYERS, getConnections } from "../data/ecosystem.js";
 
+// ---- Lightning zigzag path (replaces smooth bezier for tension connections) ----
+function lightningPath(x1, y1, x2, y2, segs = 7, amp = 2.5) {
+  const dx = x2 - x1, dy = y2 - y1;
+  const len = Math.sqrt(dx * dx + dy * dy) || 1;
+  const nx = -dy / len, ny = dx / len; // perpendicular unit vector
+  let d = `M ${x1.toFixed(2)} ${y1.toFixed(2)}`;
+  for (let i = 1; i <= segs; i++) {
+    const t = i / segs;
+    const x = x1 + dx * t;
+    const y = y1 + dy * t;
+    // taper amplitude near endpoints
+    const taper = 1 - Math.abs(t - 0.5) * 1.2;
+    const offset = (i % 2 === 0 ? amp : -amp) * Math.max(0, taper);
+    d += ` L ${(x + nx * offset).toFixed(2)} ${(y + ny * offset).toFixed(2)}`;
+  }
+  return d;
+}
+
 // ---- Concept note (content varies per layer) ----
 const CONCEPT_CONTENT = {
   1: { icon: '⛈', text: <><strong>Three storms block the crossing.</strong><br /><em>Linh's beautiful ship is stuck near Star Island.</em></> },
@@ -81,7 +99,14 @@ function MapBackground({ layer, avgIntensity }) {
           <span className="zone-label">Star Island</span>
           <span className="zone-sublabel">Digital Media · SCD, RMIT</span>
         </div>
-        <div className="zone-spacer" />
+        {/* Star shape SVG — encompasses Linh's node position */}
+        <svg className="zone-star-shape" viewBox="0 0 100 100" aria-hidden="true">
+          <polygon
+            points="50,2 61.8,35.5 97,35.5 68.6,57 79.4,90.5 50,70 20.6,90.5 31.4,57 3,35.5 38.2,35.5"
+            fill="rgba(212,168,90,.1)" stroke="rgba(212,168,90,.28)" strokeWidth="0.7"
+          />
+        </svg>
+        {/* Attrs pinned to bottom */}
         <div className="zone-attrs">
           <div className="zone-attr">
             <span className="zone-attr-icon">⏱</span>
@@ -132,13 +157,33 @@ function MapBackground({ layer, avgIntensity }) {
         <span className={`zone-gap-label${gapLabelStorm ? ' zone-gap-label-storm' : ''}`}>{gapLabel}</span>
       </div>
 
-      {/* Industry Hub */}
+      {/* Industry Hub — archipelago of islands with bridges */}
       <div className="zone zone-industry">
         <div className="zone-header">
           <span className="zone-label">Industry Hub</span>
           <span className="zone-sublabel">VFX &amp; Game · HCMC · Outsourcing</span>
         </div>
-        <div className="zone-spacer" />
+        {/* Archipelago SVG */}
+        <svg className="zone-archipelago" viewBox="0 0 100 80" aria-hidden="true">
+          {/* Main island */}
+          <ellipse cx="50" cy="52" rx="32" ry="16" fill="rgba(90,136,112,.16)" stroke="rgba(90,136,112,.32)" strokeWidth="0.7"/>
+          {/* North island */}
+          <ellipse cx="50" cy="18" rx="18" ry="9" fill="rgba(90,136,112,.13)" stroke="rgba(90,136,112,.27)" strokeWidth="0.6"/>
+          {/* West island */}
+          <ellipse cx="14" cy="48" rx="9" ry="6" fill="rgba(90,136,112,.11)" stroke="rgba(90,136,112,.22)" strokeWidth="0.6"/>
+          {/* Bridge: north ↔ main */}
+          <line x1="50" y1="27" x2="50" y2="36" stroke="rgba(90,136,112,.45)" strokeWidth="2.5" strokeLinecap="round"/>
+          <circle cx="50" cy="27" r="1.2" fill="rgba(90,136,112,.5)"/>
+          <circle cx="50" cy="36" r="1.2" fill="rgba(90,136,112,.5)"/>
+          {/* Bridge: west ↔ main */}
+          <line x1="23" y1="49" x2="18" y2="49" stroke="rgba(90,136,112,.4)" strokeWidth="2" strokeLinecap="round"/>
+          <circle cx="23" cy="49" r="1" fill="rgba(90,136,112,.45)"/>
+          {/* Fast boats */}
+          <text x="30" y="45" fontSize="7" opacity=".75">🚤</text>
+          <text x="60" y="30" fontSize="6" opacity=".65">🚤</text>
+          <text x="10" y="42" fontSize="5" opacity=".55">🚤</text>
+        </svg>
+        {/* Attrs pinned to bottom */}
         <div className="zone-attrs">
           <div className="zone-attr">
             <span className="zone-attr-icon">⚡</span>
@@ -163,11 +208,6 @@ function MapBackground({ layer, avgIntensity }) {
               <span className="zone-attr-title">Client-Centric Conversion</span>
               <span className="zone-attr-desc">Business metrics &amp; outcomes</span>
             </div>
-          </div>
-          <div className="fast-boats" aria-hidden="true">
-            <span className="fast-boat fb1">🚤</span>
-            <span className="fast-boat fb2">🚤</span>
-            <span className="fast-boat fb3">🚤</span>
           </div>
         </div>
       </div>
@@ -468,8 +508,10 @@ export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSoluti
         {connections.map((conn, i) => {
           const isIntensity = 'intensity' in conn;
           const t = isIntensity ? conn.intensity / 100 : 1;
-          const d = `M ${conn.from.x} ${conn.from.y} Q ${conn.cp.x} ${conn.cp.y} ${conn.to.x} ${conn.to.y}`;
+
+          // Intensity paths (layer 2 solutions) — smooth bezier
           if (isIntensity) {
+            const d = `M ${conn.from.x} ${conn.from.y} Q ${conn.cp.x} ${conn.cp.y} ${conn.to.x} ${conn.to.y}`;
             return (
               <path key={i} d={d} fill="none"
                 stroke={t > 0.04 ? 'var(--resolve-mid)' : 'rgba(255,255,255,.15)'}
@@ -480,6 +522,20 @@ export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSoluti
               />
             );
           }
+
+          // Tension connections — jagged lightning path with flash
+          if (conn.color === 'tension') {
+            const d = lightningPath(conn.from.x, conn.from.y, conn.to.x, conn.to.y);
+            return (
+              <path key={i} d={d} fill="none"
+                className="conn-lightning"
+                style={{ animationDelay: `${(i * 0.28) % 1.8}s` }}
+              />
+            );
+          }
+
+          // Default smooth bezier
+          const d = `M ${conn.from.x} ${conn.from.y} Q ${conn.cp.x} ${conn.cp.y} ${conn.to.x} ${conn.to.y}`;
           return (
             <path key={i} d={d} fill="none"
               className={`conn conn-${conn.color}${conn.dash ? ' dashed' : ''}`}

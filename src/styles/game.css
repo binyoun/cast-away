@@ -262,10 +262,10 @@
   background: rgba(192,67,42,.14) !important;
 }
 
-/* ---- Concept note ---- */
+/* ---- Concept note — safe zone between t2 (50%) and t3 (83%) ---- */
 .concept-note {
   position: absolute;
-  top: 28%;
+  top: 65%;
   left: 50%;
   transform: translate(-50%, -50%);
   display: flex;
@@ -275,7 +275,7 @@
   border: 1px solid rgba(255,255,255,.14);
   border-radius: 14px;
   padding: 10px 16px;
-  max-width: 240px;
+  max-width: 230px;
   text-align: left;
   pointer-events: none;
   z-index: 4;
@@ -296,13 +296,40 @@
 .concept-text strong { color: rgba(255,255,255,.92); }
 .concept-text em     { color: rgba(255,255,255,.5); font-style: italic; }
 
-/* ---- Zone attribute blocks ---- */
+/* ---- Star shape SVG (Academic Island) ---- */
+.zone-star-shape {
+  position: absolute;
+  width: min(270px, 95%);
+  height: min(270px, 95%);
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ---- Archipelago SVG (Industry Hub) ---- */
+.zone-archipelago {
+  position: absolute;
+  width: min(260px, 92%);
+  height: auto;
+  top: 48%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+  z-index: 0;
+  pointer-events: none;
+}
+
+/* ---- Zone attribute blocks — pinned to bottom ---- */
 .zone-attrs {
+  position: absolute;
+  bottom: 20px;
+  left: 8px;
+  right: 8px;
   display: flex;
   flex-direction: column;
-  gap: 12px;
-  width: 100%;
-  padding: 0 6px;
+  gap: 10px;
+  z-index: 1;
 }
 
 .zone-attr {
@@ -353,20 +380,15 @@
 .zone-academic .zone-attr-desc { color: rgba(255,220,150,1); }
 .zone-industry .zone-attr-desc { color: rgba(160,220,190,1); }
 
-/* ---- Fast boats ---- */
-.fast-boats {
-  display: flex;
-  gap: 6px;
-  margin-top: 14px;
-  opacity: .6;
+/* ---- Lightning storm connections ---- */
+.conn-lightning {
+  stroke: var(--tension);
+  stroke-opacity: .75;
+  stroke-width: 1.1;
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  animation: lightningFlash 2.4s ease-in-out infinite;
 }
-.fast-boat {
-  font-size: 1.4rem;
-  animation: fastBoatDrift 1.6s ease-in-out infinite;
-}
-.fb1 { animation-delay: 0s; }
-.fb2 { animation-delay: .35s; }
-.fb3 { animation-delay: .7s; }
 
 /* ---- Sailing ship ---- */
 .ship-container {
