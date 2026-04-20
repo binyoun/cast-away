@@ -327,9 +327,31 @@ function InfoPanel({ nodeId, layer, activeSolutions, onSetIntensity, onClose, st
   );
 }
 
-// ---- Final outcome panel (layer 4 only) ----
+// ---- Sun SVG ----
+function SunIcon() {
+  return (
+    <svg className="resolution-sun" viewBox="0 0 80 80" fill="none" aria-hidden="true">
+      <circle cx="40" cy="40" r="16" fill="rgba(255,210,80,.95)"/>
+      {[0,45,90,135,180,225,270,315].map(deg => {
+        const rad = deg * Math.PI / 180;
+        const r1 = 22, r2 = deg % 90 === 0 ? 30 : 27;
+        return (
+          <line key={deg}
+            x1={40 + r1 * Math.cos(rad)} y1={40 + r1 * Math.sin(rad)}
+            x2={40 + r2 * Math.cos(rad)} y2={40 + r2 * Math.sin(rad)}
+            stroke="rgba(255,210,80,.7)" strokeWidth={deg % 90 === 0 ? 2.5 : 1.8}
+            strokeLinecap="round"
+          />
+        );
+      })}
+      <circle cx="40" cy="40" r="16" fill="rgba(255,220,100,1)"/>
+      <circle cx="40" cy="40" r="10" fill="rgba(255,245,180,1)"/>
+    </svg>
+  );
+}
+
+// ---- Final outcome panel ----
 function FinalOutcome({ activeSolutions, visible }) {
-  const pct   = Math.round(activeSolutions.reduce((a, b) => a + b, 0) / 3);
   const items = [
     { label: 'AI Prototyping Sprint',    idx: 0 },
     { label: 'Shared Critique Boards',   idx: 1 },
@@ -338,23 +360,45 @@ function FinalOutcome({ activeSolutions, visible }) {
   return (
     <div className={`final-outcome${visible ? ' final-visible' : ''}`} aria-live="polite">
       <div className="final-inner">
-        <div className="final-left">
-          <span className="final-badge">⚓ Employability 5.0</span>
-          <h2 className="final-title">Bridge&nbsp;Complete</h2>
-          <p className="final-meta">{pct}% avg implementation — IPL gap bridged</p>
+        {/* Sun + title */}
+        <div className="final-hero">
+          <SunIcon />
+          <div className="final-hero-text">
+            <span className="final-label">The Resolution</span>
+            <h2 className="final-title">The Adaptive Practitioner</h2>
+            <p className="final-rmit">RMIT Adaptive Priorities · Flexible Lifelong Learning</p>
+          </div>
         </div>
-        <blockquote className="final-quote">
-          "Understood. If we use AI to quickly re-render, I can have mockups by end of day."
-          <cite>— Linh, responding to Tom's brief</cite>
-        </blockquote>
-        <div className="final-chips">
-          {items.map(({ label, idx }) => (
-            <div key={idx} className="final-chip">
-              <span className="final-chip-check">✓</span>
-              <span>{label}</span>
-              <span className="final-chip-pct">{activeSolutions[idx]}%</span>
-            </div>
-          ))}
+
+        {/* Body */}
+        <div className="final-body">
+          <p className="final-desc">
+            The system mismatch is resolved. When Tom delivers rapid, blunt feedback,
+            Linh no longer freezes. Operating with clear Theory of Mind, she has become
+            an Adaptive Practitioner — turning academic insight into industry value.
+          </p>
+          <blockquote className="final-quote">
+            "Understood. If we use AI to quickly re-render the middle sequence with the
+            brand's primary palette and simplify the 3D assets, we can hit that target.
+            Let's look at a quick mockup."
+            <cite>— Linh, responding to Tom's brief</cite>
+          </blockquote>
+        </div>
+
+        {/* Right column */}
+        <div className="final-right">
+          <div className="final-chips">
+            {items.map(({ label, idx }) => (
+              <div key={idx} className="final-chip">
+                <span className="final-chip-check">✓</span>
+                <span>{label}</span>
+                <span className="final-chip-pct">{activeSolutions[idx]}%</span>
+              </div>
+            ))}
+          </div>
+          <p className="final-kwa">
+            Isolated knowledge → <strong>Knowledge with Action</strong>
+          </p>
         </div>
       </div>
     </div>
