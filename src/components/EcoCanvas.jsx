@@ -77,18 +77,36 @@ function MapBackground({ layer, avgIntensity }) {
     <div className={`map-bg map-bg-layer-${layer}`} aria-hidden="true">
       {/* Star Island */}
       <div className="zone zone-academic">
-        <div className="island-icon island-icon-academic">
-          <svg viewBox="0 0 24 24" fill="none">
-            <polygon points="12,2 15.09,8.26 22,9.27 17,14.14 18.18,21.02 12,17.77 5.82,21.02 7,14.14 2,9.27 8.91,8.26"
-              stroke="rgba(184,146,90,.6)" strokeWidth="1.2" fill="rgba(184,146,90,.12)"/>
-          </svg>
+        <div className="zone-header">
+          <span className="zone-label">Star Island</span>
+          <span className="zone-sublabel">Digital Media · SCD, RMIT</span>
         </div>
-        <span className="zone-label">Star Island</span>
-        <span className="zone-sublabel">Digital Media · SCD, RMIT</span>
-        <div className="zone-info">
-          <span>⏱ Semester-long timelines</span>
-          <span>🎨 Deep craft specialisation</span>
-          <span>⭐ Artistic &amp; conceptual evaluation</span>
+        <div className="zone-spacer" />
+        <div className="zone-attrs">
+          <div className="zone-attr">
+            <span className="zone-attr-icon">⏱</span>
+            <div className="zone-attr-body">
+              <span className="zone-attr-cat">Pacing &amp; Time</span>
+              <span className="zone-attr-title">Incubation &amp; Perfectionism</span>
+              <span className="zone-attr-desc">Semester-long timelines &amp; deliberate craft</span>
+            </div>
+          </div>
+          <div className="zone-attr">
+            <span className="zone-attr-icon">🎯</span>
+            <div className="zone-attr-body">
+              <span className="zone-attr-cat">Role &amp; Adaptability</span>
+              <span className="zone-attr-title">Deep Technical Specialization</span>
+              <span className="zone-attr-desc">Hyper-focus in a single discipline</span>
+            </div>
+          </div>
+          <div className="zone-attr">
+            <span className="zone-attr-icon">⭐</span>
+            <div className="zone-attr-body">
+              <span className="zone-attr-cat">Evaluation Focus</span>
+              <span className="zone-attr-title">Artistic &amp; Conceptual Purity</span>
+              <span className="zone-attr-desc">Studio critique &amp; peer validation</span>
+            </div>
+          </div>
         </div>
       </div>
 
@@ -116,23 +134,41 @@ function MapBackground({ layer, avgIntensity }) {
 
       {/* Industry Hub */}
       <div className="zone zone-industry">
-        <div className="island-icon island-icon-industry">
-          <svg viewBox="0 0 24 24" fill="none">
-            <rect x="5" y="8" width="14" height="12" stroke="rgba(90,136,112,.6)" strokeWidth="1.5" fill="rgba(90,136,112,.12)"/>
-            <path d="M3 8 L12 3 L21 8" stroke="rgba(90,136,112,.5)" strokeWidth="1.5" fill="none"/>
-          </svg>
+        <div className="zone-header">
+          <span className="zone-label">Industry Hub</span>
+          <span className="zone-sublabel">VFX &amp; Game · HCMC · Outsourcing</span>
         </div>
-        <span className="zone-label">Industry Hub</span>
-        <span className="zone-sublabel">VFX &amp; Game · HCMC · Outsourcing</span>
-        <div className="zone-info">
-          <span>⚡ 48h–1 week sprints</span>
-          <span>🔀 Multi-format versatility</span>
-          <span>📊 Client conversion metrics</span>
-        </div>
-        <div className="fast-boats" aria-hidden="true">
-          <span className="fast-boat fb1">🚤</span>
-          <span className="fast-boat fb2">🚤</span>
-          <span className="fast-boat fb3">🚤</span>
+        <div className="zone-spacer" />
+        <div className="zone-attrs">
+          <div className="zone-attr">
+            <span className="zone-attr-icon">⚡</span>
+            <div className="zone-attr-body">
+              <span className="zone-attr-cat">Pacing &amp; Time</span>
+              <span className="zone-attr-title">Sprint-Based Velocity</span>
+              <span className="zone-attr-desc">48h–1 week turnarounds</span>
+            </div>
+          </div>
+          <div className="zone-attr">
+            <span className="zone-attr-icon">🔀</span>
+            <div className="zone-attr-body">
+              <span className="zone-attr-cat">Role &amp; Adaptability</span>
+              <span className="zone-attr-title">Multi-Format Versatility</span>
+              <span className="zone-attr-desc">AI-ready jack of all trades</span>
+            </div>
+          </div>
+          <div className="zone-attr">
+            <span className="zone-attr-icon">📊</span>
+            <div className="zone-attr-body">
+              <span className="zone-attr-cat">Evaluation Focus</span>
+              <span className="zone-attr-title">Client-Centric Conversion</span>
+              <span className="zone-attr-desc">Business metrics &amp; outcomes</span>
+            </div>
+          </div>
+          <div className="fast-boats" aria-hidden="true">
+            <span className="fast-boat fb1">🚤</span>
+            <span className="fast-boat fb2">🚤</span>
+            <span className="fast-boat fb3">🚤</span>
+          </div>
         </div>
       </div>
     </div>
@@ -334,8 +370,8 @@ export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSoluti
   const avg    = activeSolutions.reduce((a, b) => a + b, 0) / 3;
   const drift  = (avg / 100) * 10;
   // Drift only in layer 2 (The Compass)
-  const linhX  = layer === 2 ? 20 + drift : 20;
-  const tomX   = layer === 2 ? 80 - drift : 80;
+  const linhX  = layer === 2 ? 15 + drift : 15;
+  const tomX   = layer === 2 ? 85 - drift : 85;
 
   const allActive  = activeSolutions.filter(v => v > 0).length === 3;
   const isComplete = layer === 2 && allActive && avg >= 78;

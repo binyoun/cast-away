@@ -121,22 +121,22 @@ export const LAYERS = {
     label: 'The Gap',
     sub: 'Situation & Tensions — click nodes to explore',
     nodePositions: [
-      { id: 'linh', x: 20, y: 55 },
+      { id: 'linh', x: 15, y: 55 },
       { id: 't1',   x: 50, y: 16 },
       { id: 't2',   x: 50, y: 50 },
       { id: 't3',   x: 50, y: 83 },
-      { id: 'tom',  x: 80, y: 55 },
+      { id: 'tom',  x: 85, y: 55 },
     ]
   },
   2: {
     label: 'The Compass',
     sub: 'IPL Interventions — drag sliders to apply',
     nodePositions: [
-      { id: 'linh', x: 20, y: 55 },
+      { id: 'linh', x: 15, y: 55 },
       { id: 's1',   x: 50, y: 16 },
       { id: 's2',   x: 50, y: 50 },
       { id: 's3',   x: 50, y: 83 },
-      { id: 'tom',  x: 80, y: 55 },
+      { id: 'tom',  x: 85, y: 55 },
     ]
   }
 };
@@ -145,24 +145,22 @@ function cp(ax, ay, bx, by, bow = 6) {
   return { x: (ax + bx) / 2, y: (ay + by) / 2 - bow };
 }
 
-export function getConnections(layerId, activeSolutions, linhX = 20, tomX = 80) {
+export function getConnections(layerId, activeSolutions, linhX = 15, tomX = 85) {
   const lY = 55, tY = 55;
 
-  // Layer 1: amber + slate + 6 tension lines (linh/tom → t1, t2, t3)
+  // Layer 1: 6 tension lines only (linh/tom → t1, t2, t3) — no amber/slate island lines
   if (layerId === 1) {
     return [
-      { from:{x:10,y:20}, to:{x:20,y:55},  cp: cp(10,20,20,55,4),  color:'amber',   dash:false },
-      { from:{x:90,y:20}, to:{x:80,y:55},  cp: cp(90,20,80,55,4),  color:'slate',   dash:false },
-      { from:{x:20,y:55}, to:{x:50,y:16},  cp: cp(20,55,50,16,8),  color:'tension', dash:false },
-      { from:{x:20,y:55}, to:{x:50,y:50},  cp: cp(20,55,50,50,6),  color:'tension', dash:false },
-      { from:{x:20,y:55}, to:{x:50,y:83},  cp: cp(20,55,50,83,6),  color:'tension', dash:false },
-      { from:{x:80,y:55}, to:{x:50,y:16},  cp: cp(80,55,50,16,8),  color:'tension', dash:false },
-      { from:{x:80,y:55}, to:{x:50,y:50},  cp: cp(80,55,50,50,6),  color:'tension', dash:false },
-      { from:{x:80,y:55}, to:{x:50,y:83},  cp: cp(80,55,50,83,6),  color:'tension', dash:false },
+      { from:{x:linhX,y:55}, to:{x:50,y:16}, cp: cp(linhX,55,50,16,8), color:'tension', dash:false },
+      { from:{x:linhX,y:55}, to:{x:50,y:50}, cp: cp(linhX,55,50,50,6), color:'tension', dash:false },
+      { from:{x:linhX,y:55}, to:{x:50,y:83}, cp: cp(linhX,55,50,83,6), color:'tension', dash:false },
+      { from:{x:tomX, y:55}, to:{x:50,y:16}, cp: cp(tomX, 55,50,16,8), color:'tension', dash:false },
+      { from:{x:tomX, y:55}, to:{x:50,y:50}, cp: cp(tomX, 55,50,50,6), color:'tension', dash:false },
+      { from:{x:tomX, y:55}, to:{x:50,y:83}, cp: cp(tomX, 55,50,83,6), color:'tension', dash:false },
     ];
   }
 
-  // Layer 2: amber + slate + 6 intensity paths (dynamic linhX/tomX)
+  // Layer 2: 6 intensity paths only (dynamic linhX/tomX) — no amber/slate island lines
   if (layerId === 2) {
     const make = (sx, sy, idx) => {
       const t = activeSolutions[idx] / 100;
@@ -181,8 +179,6 @@ export function getConnections(layerId, activeSolutions, linhX = 20, tomX = 80) 
       ];
     };
     return [
-      { from: {x:10,y:20}, to: {x:linhX,y:lY}, cp: cp(10,20,linhX,lY,4), color: 'amber', dash: false },
-      { from: {x:90,y:20}, to: {x:tomX,y:tY},  cp: cp(90,20,tomX,tY,4),  color: 'slate', dash: false },
       ...make(50,16,0),
       ...make(50,50,1),
       ...make(50,83,2),

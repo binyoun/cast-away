@@ -111,13 +111,10 @@
   flex: 1;
   position: relative;
   overflow: hidden;
-  /* Ocean base */
   background-color: var(--ocean);
   background-image:
-    /* Subtle nautical grid on top */
     repeating-linear-gradient(0deg,   transparent, transparent 39px, rgba(255,255,255,.03) 39px, rgba(255,255,255,.03) 40px),
     repeating-linear-gradient(90deg,  transparent, transparent 39px, rgba(255,255,255,.03) 39px, rgba(255,255,255,.03) 40px),
-    /* Ocean depth gradient */
     linear-gradient(160deg, var(--ocean-deep) 0%, var(--ocean) 55%, var(--ocean-light) 100%);
 }
 
@@ -135,21 +132,58 @@
   display: flex;
   flex-direction: column;
   align-items: center;
-  justify-content: flex-end;
-  padding-bottom: 20px;
-  gap: 2px;
+  justify-content: flex-start;
+  padding: 20px 10px 20px;
+  gap: 0;
 }
 
-/* Academic island — warm amber/sand */
+/* ---- Zone header (name + sublabel at top) ---- */
+.zone-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 4px;
+  position: relative;
+  z-index: 1;
+}
+
+/* Spacer pushes attrs to bottom, header stays at top */
+.zone-spacer { flex: 1; }
+
+/* ---- Zone labels ---- */
+.zone-label {
+  font-family: var(--heading);
+  font-size: 1rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .08em;
+  text-align: center;
+  line-height: 1.3;
+}
+
+.zone-academic .zone-label { color: rgba(212,168,90,.9); }
+.zone-industry .zone-label { color: rgba(90,170,130,.9); }
+
+.zone-sublabel {
+  font-family: var(--mono);
+  font-size: .68rem;
+  letter-spacing: .06em;
+  text-align: center;
+  line-height: 1.4;
+  opacity: .65;
+}
+.zone-academic .zone-sublabel { color: rgba(212,168,90,1); }
+.zone-industry .zone-sublabel { color: rgba(90,170,130,1); }
+
+/* ---- Academic island — warm amber/sand ---- */
 .zone-academic {
-  flex: 0 0 22%;
+  flex: 0 0 30%;
   background: linear-gradient(to right,
     rgba(184,146,90,.38) 0%,
     rgba(184,146,90,.18) 75%,
     transparent 100%);
   border-right: 1px dashed rgba(184,146,90,.35);
 }
-/* Coastal "shore" inner glow */
 .zone-academic::after {
   content: '';
   position: absolute;
@@ -158,9 +192,9 @@
   clip-path: polygon(0 4%, 100% 0%, 96% 100%, 0 97%);
 }
 
-/* Industry island — sage/forest */
+/* ---- Industry island — sage/forest ---- */
 .zone-industry {
-  flex: 0 0 22%;
+  flex: 0 0 30%;
   background: linear-gradient(to left,
     rgba(90,136,112,.38) 0%,
     rgba(90,136,112,.18) 75%,
@@ -175,7 +209,7 @@
   clip-path: polygon(4% 0%, 100% 3%, 100% 96%, 0 100%);
 }
 
-/* Ocean gap between islands */
+/* ---- Ocean gap between islands ---- */
 .zone-gap {
   flex: 1;
   display: flex;
@@ -185,35 +219,24 @@
   overflow: hidden;
 }
 
-.zone-label {
-  font-family: var(--heading);
-  font-size: .6rem;
-  font-weight: 700;
-  text-transform: uppercase;
-  letter-spacing: .1em;
-  text-align: center;
-  line-height: 1.4;
-  position: relative;
-  z-index: 1;
-}
-
-.zone-academic .zone-label { color: var(--land-amber); opacity: .75; }
-.zone-industry .zone-label { color: var(--land-slate);  opacity: .75; }
-
-.zone-watermark {
+/* ---- Ocean label ---- */
+.zone-ocean-label {
   position: absolute;
-  top: 50%;
+  top: 10px;
   left: 50%;
-  transform: translate(-50%, -50%) rotate(-12deg);
+  transform: translateX(-50%);
   font-family: var(--heading);
-  font-size: clamp(3.5rem, 8vw, 7rem);
+  font-size: 1.05rem;
   font-weight: 700;
-  color: rgba(255,255,255,.055);
-  letter-spacing: -.04em;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+  color: rgba(255,255,255,.22);
   white-space: nowrap;
-  user-select: none;
+  pointer-events: none;
+  z-index: 2;
 }
 
+/* ---- Gap bottom label ---- */
 .zone-gap-label {
   position: absolute;
   bottom: 16px;
@@ -232,60 +255,118 @@
   white-space: nowrap;
 }
 
-/* ---- Concept note (replaces watermark) ---- */
+/* Storm-specific gap label */
+.zone-gap-label-storm {
+  color: var(--tension-mid) !important;
+  border-color: rgba(192,67,42,.35) !important;
+  background: rgba(192,67,42,.14) !important;
+}
+
+/* ---- Concept note ---- */
 .concept-note {
   position: absolute;
-  top: 18px;
+  top: 28%;
   left: 50%;
-  transform: translateX(-50%);
+  transform: translate(-50%, -50%);
   display: flex;
   align-items: flex-start;
-  gap: 7px;
-  background: rgba(255,255,255,.07);
-  border: 1px solid rgba(255,255,255,.12);
-  border-radius: 12px;
-  padding: 8px 14px;
-  max-width: 220px;
+  gap: 8px;
+  background: rgba(255,255,255,.08);
+  border: 1px solid rgba(255,255,255,.14);
+  border-radius: 14px;
+  padding: 10px 16px;
+  max-width: 240px;
   text-align: left;
   pointer-events: none;
   z-index: 4;
 }
 
 .concept-anchor {
-  font-size: .9rem;
+  font-size: 1rem;
   flex-shrink: 0;
   margin-top: 1px;
 }
 
 .concept-text {
-  font-size: .67rem;
-  color: rgba(255,255,255,.65);
-  line-height: 1.55;
+  font-size: .72rem;
+  color: rgba(255,255,255,.7);
+  line-height: 1.6;
 }
 
-.concept-text em {
-  color: rgba(255,255,255,.45);
-  font-style: italic;
+.concept-text strong { color: rgba(255,255,255,.92); }
+.concept-text em     { color: rgba(255,255,255,.5); font-style: italic; }
+
+/* ---- Zone attribute blocks ---- */
+.zone-attrs {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  padding: 0 6px;
 }
 
-/* ---- Island icon in zone header ---- */
-.island-icon {
-  width: 28px;
-  height: 28px;
-  margin-bottom: 4px;
-  opacity: .55;
+.zone-attr {
+  display: flex;
+  align-items: flex-start;
+  gap: 8px;
+}
+
+.zone-attr-icon {
+  font-size: 1rem;
+  line-height: 1.3;
   flex-shrink: 0;
+  margin-top: 1px;
 }
 
-/* Zone sublabel */
-.zone-sublabel {
-  font-size: .58rem;
-  letter-spacing: .06em;
-  margin-top: 2px;
-  opacity: .5;
+.zone-attr-body {
+  display: flex;
+  flex-direction: column;
+  gap: 2px;
 }
-.zone-academic .zone-sublabel { color: var(--land-amber); }
-.zone-industry .zone-sublabel { color: var(--land-slate); }
+
+.zone-attr-cat {
+  font-family: var(--mono);
+  font-size: .6rem;
+  letter-spacing: .08em;
+  text-transform: uppercase;
+  line-height: 1.3;
+  opacity: .6;
+}
+.zone-academic .zone-attr-cat { color: rgba(212,168,90,1); }
+.zone-industry .zone-attr-cat { color: rgba(90,170,130,1); }
+
+.zone-attr-title {
+  font-family: var(--heading);
+  font-size: .82rem;
+  font-weight: 700;
+  line-height: 1.2;
+}
+.zone-academic .zone-attr-title { color: rgba(255,220,150,.95); }
+.zone-industry .zone-attr-title { color: rgba(160,220,190,.95); }
+
+.zone-attr-desc {
+  font-size: .7rem;
+  font-style: italic;
+  line-height: 1.4;
+  opacity: .65;
+}
+.zone-academic .zone-attr-desc { color: rgba(255,220,150,1); }
+.zone-industry .zone-attr-desc { color: rgba(160,220,190,1); }
+
+/* ---- Fast boats ---- */
+.fast-boats {
+  display: flex;
+  gap: 6px;
+  margin-top: 14px;
+  opacity: .6;
+}
+.fast-boat {
+  font-size: 1.4rem;
+  animation: fastBoatDrift 1.6s ease-in-out infinite;
+}
+.fb1 { animation-delay: 0s; }
+.fb2 { animation-delay: .35s; }
+.fb3 { animation-delay: .7s; }
 
 /* ---- Sailing ship ---- */
 .ship-container {
@@ -321,7 +402,19 @@
   filter: drop-shadow(0 0 12px rgba(201,125,56,.6)) drop-shadow(0 3px 8px rgba(0,0,0,.35));
 }
 
-/* ---- Storm overlay (layer 3) ---- */
+/* ---- Ship label ---- */
+.ship-label {
+  font-size: .58rem;
+  color: rgba(255,210,80,.7);
+  font-family: var(--mono);
+  text-align: center;
+  margin-top: 3px;
+  white-space: nowrap;
+  pointer-events: none;
+  letter-spacing: .06em;
+}
+
+/* ---- Storm overlay ---- */
 .storm-overlay {
   position: absolute;
   inset: 0;
@@ -336,20 +429,12 @@
   animation: stormPulse 3s ease-in-out infinite;
 }
 
-/* Storm-specific gap label */
-.zone-gap-label-storm {
-  color: var(--tension-mid) !important;
-  border-color: rgba(192,67,42,.35) !important;
-  background: rgba(192,67,42,.14) !important;
-}
-
 /* Blocked ship near academic shore */
 .ship-blocked .ship-svg {
   filter: drop-shadow(0 3px 8px rgba(0,0,0,.35));
-  /* no glow — ship is stuck */
 }
 
-/* Storm ripple — expands from clicked tension node */
+/* Storm ripple */
 .storm-ripple {
   position: absolute;
   transform: translate(-50%, -50%);
@@ -429,7 +514,7 @@
 .compass-wrap:hover .compass-svg { transform: rotate(18deg); }
 .compass-wrap:active .compass-svg { transform: rotate(36deg) scale(.92); }
 
-/* ---- Map legend (toggled by compass) ---- */
+/* ---- Map legend ---- */
 .map-legend {
   position: absolute;
   bottom: 96px;
@@ -444,7 +529,6 @@
   padding: 12px 16px;
   border: 1px solid rgba(255,255,255,.15);
   box-shadow: 0 8px 32px rgba(0,0,0,.3);
-  /* Hidden by default */
   opacity: 0;
   transform: translateY(10px);
   pointer-events: none;
@@ -472,7 +556,6 @@
 .legend-hex     { width: 12px; height: 12px; background: var(--tension-mid); clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); }
 .legend-diamond { width: 11px; height: 11px; background: var(--resolve-mid); clip-path: polygon(50% 0%,100% 50%,50% 100%,0% 50%); }
 
-/* Legend title */
 .legend-title {
   font-family: var(--mono);
   font-size: .6rem;
@@ -481,62 +564,6 @@
   letter-spacing: .1em;
   color: rgba(255,255,255,.45);
   margin-bottom: 4px;
-}
-
-/* ---- Zone info (always-visible island system summary) ---- */
-.zone-info {
-  display: flex;
-  flex-direction: column;
-  gap: 3px;
-  margin-top: 8px;
-  padding: 0 4px;
-  font-size: .58rem;
-  line-height: 1.5;
-  pointer-events: none;
-}
-.zone-academic .zone-info { color: rgba(184,146,90,.65); }
-.zone-industry .zone-info { color: rgba(90,136,112,.65); }
-
-/* ---- Ocean label in gap zone ---- */
-.zone-ocean-label {
-  position: absolute;
-  top: 8px;
-  left: 50%;
-  transform: translateX(-50%);
-  font-family: var(--mono);
-  font-size: .58rem;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: rgba(255,255,255,.18);
-  white-space: nowrap;
-  pointer-events: none;
-  z-index: 2;
-}
-
-/* ---- Fast boats in Industry Hub ---- */
-.fast-boats {
-  display: flex;
-  gap: 4px;
-  margin-top: 8px;
-  opacity: .5;
-}
-.fast-boat {
-  font-size: .85rem;
-  animation: fastBoatDrift 1.6s ease-in-out infinite;
-}
-.fb1 { animation-delay: 0s; }
-.fb2 { animation-delay: .35s; }
-.fb3 { animation-delay: .7s; }
-
-/* ---- Ship label (shown when stuck) ---- */
-.ship-label {
-  font-size: .52rem;
-  color: rgba(255,210,80,.65);
-  font-family: var(--mono);
-  text-align: center;
-  margin-top: 2px;
-  white-space: nowrap;
-  pointer-events: none;
 }
 
 /* ---- SVG connections ---- */
@@ -554,13 +581,9 @@
   transition: stroke .4s ease, stroke-opacity .4s ease;
 }
 
-/* Sea-route colours on ocean background */
-.conn-amber   { stroke: var(--amber);       stroke-opacity: .65; stroke-width: .55; }
-.conn-slate   { stroke: var(--land-slate);  stroke-opacity: .65; stroke-width: .55; }
-.conn-tension { stroke: var(--tension);     stroke-opacity: .6;  stroke-width: .7;  animation: tensionPulse .7s ease .15s both; }
-.conn-muted   { stroke: rgba(255,255,255,.18); stroke-opacity: .8;  stroke-width: .4; }
-
-.conn.dashed { stroke-dasharray: .8 1.4; }
+.conn-tension { stroke: var(--tension); stroke-opacity: .6; stroke-width: .7; animation: tensionPulse .7s ease .15s both; }
+.conn-muted   { stroke: rgba(255,255,255,.18); stroke-opacity: .8; stroke-width: .4; }
+.conn.dashed  { stroke-dasharray: .8 1.4; }
 
 /* ---- Nodes layer ---- */
 .nodes-layer {
@@ -590,7 +613,6 @@
   display: flex;
   align-items: center;
   justify-content: center;
-  /* More prominent shadow on ocean */
   box-shadow: 0 4px 18px rgba(0,0,0,.35), 0 1px 5px rgba(0,0,0,.2);
   transition: box-shadow .25s ease, filter .2s ease, opacity .2s ease;
 }
@@ -600,12 +622,10 @@
 .node-diamond .node-body { width: 62px; height: 62px; clip-path: polygon(50% 0%,100% 50%,50% 100%,0% 50%); }
 .node-rect    .node-body { width: 110px; height: 44px; border-radius: 10px; }
 
-/* Active ring — white + colour on ocean bg looks sharp */
 .node.node-active .node-body {
   box-shadow: 0 0 0 3px rgba(255,255,255,.9), 0 0 0 6px currentColor, 0 8px 28px rgba(0,0,0,.4);
 }
 
-/* Map-pin drop shadow for character circles */
 .node-circle .node-body::after {
   content: '';
   position: absolute;
@@ -634,7 +654,6 @@
   pointer-events: none;
 }
 
-/* Node labels — white + shadow for legibility on ocean */
 .node-meta {
   display: flex;
   flex-direction: column;
@@ -952,4 +971,6 @@
   .final-inner  { flex-wrap: wrap; gap: 10px; padding: 12px 16px; }
   .final-chips  { display: none; }
   .final-quote  { display: none; }
+  .zone-attr-title { font-size: .72rem; }
+  .zone-attr-desc  { display: none; }
 }
