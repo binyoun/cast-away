@@ -51,9 +51,9 @@ function StormRipple({ x, y, onEnd }) {
 }
 
 // ---- Sailing ship ----
-function Ship({ progress, stuck, topPct = 42 }) {
-  const shipX   = stuck ? 26 : 32 + progress * 35;
-  const arrived = !stuck && progress >= 0.88;
+function Ship({ progress, stuck, topPct = 42, range = 35, shipNum }) {
+  const shipX   = stuck ? 26 : 32 + progress * range;
+  const arrived = !stuck && shipX >= 74;
   const wakeEnd = Math.max(32, shipX - 2.5);
 
   return (
@@ -80,6 +80,7 @@ function Ship({ progress, stuck, topPct = 42 }) {
           <path d="M25 4 L32 6.5 L25 9 Z" fill="var(--amber)"/>
         </svg>
         {stuck && <div className="ship-label">Linh's Ship</div>}
+        {!stuck && shipNum && <div className="ship-num">{shipNum}</div>}
       </div>
     </div>
   );
@@ -92,12 +93,14 @@ function MapBackground({ layer, avgIntensity, activeSolutions, isComplete }) {
   const solsOver50  = layer === 2 ? activeSolutions.filter(v => v > 50).length : 0;
   const shipCount   = layer === 1 ? 1 : Math.max(1, solsOver50);
   const avgProgress = avgIntensity / 100;
+  // More solutions = faster/longer range toward industry hub
+  const shipRange   = 40 + solsOver50 * 6;
 
-  // Fleet positions: 3 ships at different vertical positions + staggered progress
+  // Fleet: 3 ships at different vertical positions + staggered progress
   const FLEET = [
-    { topPct: 42, offset: 0    },
-    { topPct: 36, offset: -0.06 },
-    { topPct: 48, offset: -0.11 },
+    { topPct: 42, offset: 0     },
+    { topPct: 37, offset: -0.05 },
+    { topPct: 47, offset: -0.10 },
   ];
 
   const gapLabel      = layer === 1 ? 'The IPL Storm' : 'The IPL Gap';
@@ -137,11 +140,11 @@ function MapBackground({ layer, avgIntensity, activeSolutions, isComplete }) {
             </div>
           </div>
           <div className="zone-attr">
-            <span className="zone-attr-icon">⭐</span>
+            <span className="zone-attr-icon">📋</span>
             <div className="zone-attr-body">
               <span className="zone-attr-cat">Evaluation Focus</span>
-              <span className="zone-attr-title">Artistic &amp; Conceptual Purity</span>
-              <span className="zone-attr-desc">Studio critique &amp; peer validation</span>
+              <span className="zone-attr-title">Methodological Rigor &amp; Justification</span>
+              <span className="zone-attr-desc">2,000-word rationales, mood boards &amp; process docs</span>
             </div>
           </div>
         </div>
@@ -154,21 +157,26 @@ function MapBackground({ layer, avgIntensity, activeSolutions, isComplete }) {
         {showStorm && <StormOverlay />}
         {isComplete && (
           <div className="ocean-sun-wrap" aria-hidden="true">
-            <svg className="ocean-sun" viewBox="0 0 120 120" fill="none">
+            <svg className="ocean-sun" viewBox="0 0 140 140" fill="none">
+              {/* Outer glow ring */}
+              <circle cx="70" cy="70" r="56" fill="rgba(255,210,80,.04)" stroke="rgba(255,210,80,.08)" strokeWidth="1"/>
+              <circle cx="70" cy="70" r="42" fill="rgba(255,210,80,.06)" stroke="rgba(255,210,80,.10)" strokeWidth="1"/>
+              {/* Rays */}
               {[0,30,60,90,120,150,180,210,240,270,300,330].map(deg => {
                 const rad = deg * Math.PI / 180;
-                const r1 = 32, r2 = deg % 90 === 0 ? 50 : 43;
+                const r1 = 33, r2 = deg % 90 === 0 ? 54 : 46;
                 return (
                   <line key={deg}
-                    x1={60 + r1 * Math.cos(rad)} y1={60 + r1 * Math.sin(rad)}
-                    x2={60 + r2 * Math.cos(rad)} y2={60 + r2 * Math.sin(rad)}
-                    stroke="rgba(255,210,80,.55)" strokeWidth={deg % 90 === 0 ? 3.5 : 2.2}
+                    x1={70 + r1 * Math.cos(rad)} y1={70 + r1 * Math.sin(rad)}
+                    x2={70 + r2 * Math.cos(rad)} y2={70 + r2 * Math.sin(rad)}
+                    stroke="rgba(255,210,80,.38)" strokeWidth={deg % 90 === 0 ? 3 : 1.8}
                     strokeLinecap="round"
                   />
                 );
               })}
-              <circle cx="60" cy="60" r="24" fill="rgba(255,225,100,1)"/>
-              <circle cx="60" cy="60" r="15" fill="rgba(255,248,200,1)"/>
+              {/* Core — transparent glowing disc */}
+              <circle cx="70" cy="70" r="26" fill="rgba(255,225,100,.28)" stroke="rgba(255,210,80,.22)" strokeWidth="1.5"/>
+              <circle cx="70" cy="70" r="17" fill="rgba(255,248,200,.20)"/>
             </svg>
           </div>
         )}
@@ -180,6 +188,8 @@ function MapBackground({ layer, avgIntensity, activeSolutions, isComplete }) {
               progress={Math.max(0, avgProgress + sd.offset)}
               stuck={false}
               topPct={sd.topPct}
+              range={shipRange}
+              shipNum={i + 1}
             />
           ))
         )}
@@ -205,25 +215,43 @@ function MapBackground({ layer, avgIntensity, activeSolutions, isComplete }) {
           <span className="zone-label">Industry Hub</span>
           <span className="zone-sublabel">VFX &amp; Game · HCMC · Outsourcing</span>
         </div>
-        {/* Archipelago SVG */}
-        <svg className="zone-archipelago" viewBox="0 0 100 80" aria-hidden="true">
-          {/* Main island */}
-          <ellipse cx="50" cy="52" rx="32" ry="16" fill="rgba(90,136,112,.16)" stroke="rgba(90,136,112,.32)" strokeWidth="0.7"/>
-          {/* North island */}
-          <ellipse cx="50" cy="18" rx="18" ry="9" fill="rgba(90,136,112,.13)" stroke="rgba(90,136,112,.27)" strokeWidth="0.6"/>
-          {/* West island */}
-          <ellipse cx="14" cy="48" rx="9" ry="6" fill="rgba(90,136,112,.11)" stroke="rgba(90,136,112,.22)" strokeWidth="0.6"/>
-          {/* Bridge: north ↔ main */}
-          <line x1="50" y1="27" x2="50" y2="36" stroke="rgba(90,136,112,.45)" strokeWidth="2.5" strokeLinecap="round"/>
-          <circle cx="50" cy="27" r="1.2" fill="rgba(90,136,112,.5)"/>
-          <circle cx="50" cy="36" r="1.2" fill="rgba(90,136,112,.5)"/>
-          {/* Bridge: west ↔ main */}
-          <line x1="23" y1="49" x2="18" y2="49" stroke="rgba(90,136,112,.4)" strokeWidth="2" strokeLinecap="round"/>
-          <circle cx="23" cy="49" r="1" fill="rgba(90,136,112,.45)"/>
-          {/* Fast boats */}
-          <text x="30" y="45" fontSize="7" opacity=".75">🚤</text>
-          <text x="60" y="30" fontSize="6" opacity=".65">🚤</text>
-          <text x="10" y="42" fontSize="5" opacity=".55">🚤</text>
+        {/* Archipelago SVG — 8 islands, 10 boats */}
+        <svg className="zone-archipelago" viewBox="0 0 100 90" aria-hidden="true">
+          {/* Island 1 — main */}
+          <ellipse cx="50" cy="54" rx="30" ry="14" fill="rgba(90,136,112,.17)" stroke="rgba(90,136,112,.32)" strokeWidth="0.7"/>
+          {/* Island 2 — north */}
+          <ellipse cx="50" cy="20" rx="17" ry="8" fill="rgba(90,136,112,.14)" stroke="rgba(90,136,112,.28)" strokeWidth="0.6"/>
+          {/* Island 3 — west */}
+          <ellipse cx="13" cy="50" rx="8" ry="5" fill="rgba(90,136,112,.11)" stroke="rgba(90,136,112,.22)" strokeWidth="0.5"/>
+          {/* Island 4 — east */}
+          <ellipse cx="88" cy="47" rx="7" ry="4.5" fill="rgba(90,136,112,.12)" stroke="rgba(90,136,112,.24)" strokeWidth="0.5"/>
+          {/* Island 5 — south */}
+          <ellipse cx="50" cy="76" rx="12" ry="5" fill="rgba(90,136,112,.10)" stroke="rgba(90,136,112,.20)" strokeWidth="0.5"/>
+          {/* Island 6 — NW */}
+          <ellipse cx="19" cy="27" rx="6" ry="3.5" fill="rgba(90,136,112,.10)" stroke="rgba(90,136,112,.20)" strokeWidth="0.5"/>
+          {/* Island 7 — NE */}
+          <ellipse cx="81" cy="24" rx="6" ry="3.5" fill="rgba(90,136,112,.10)" stroke="rgba(90,136,112,.20)" strokeWidth="0.5"/>
+          {/* Island 8 — SE */}
+          <ellipse cx="79" cy="70" rx="7" ry="4" fill="rgba(90,136,112,.10)" stroke="rgba(90,136,112,.20)" strokeWidth="0.5"/>
+          {/* Bridges */}
+          <line x1="50" y1="28" x2="50" y2="40" stroke="rgba(90,136,112,.42)" strokeWidth="2.2" strokeLinecap="round"/>
+          <circle cx="50" cy="28" r="1.1" fill="rgba(90,136,112,.5)"/>
+          <circle cx="50" cy="40" r="1.1" fill="rgba(90,136,112,.5)"/>
+          <line x1="21" y1="50" x2="20" y2="50" stroke="rgba(90,136,112,.38)" strokeWidth="1.8" strokeLinecap="round"/>
+          <line x1="81" y1="47" x2="80" y2="48" stroke="rgba(90,136,112,.38)" strokeWidth="1.8" strokeLinecap="round"/>
+          <line x1="50" y1="68" x2="50" y2="71" stroke="rgba(90,136,112,.32)" strokeWidth="1.5" strokeLinecap="round"/>
+          <line x1="75" y1="67" x2="72" y2="65" stroke="rgba(90,136,112,.28)" strokeWidth="1.4" strokeLinecap="round"/>
+          {/* 10 boats */}
+          <text x="32" y="47" fontSize="7"  opacity=".80">🚤</text>
+          <text x="58" y="32" fontSize="6"  opacity=".70">🚤</text>
+          <text x="8"  y="44" fontSize="5"  opacity=".60">🚤</text>
+          <text x="68" y="50" fontSize="7"  opacity=".75">🚤</text>
+          <text x="40" y="22" fontSize="5"  opacity=".60">🚤</text>
+          <text x="83" y="40" fontSize="6"  opacity=".65">🚤</text>
+          <text x="18" y="60" fontSize="5"  opacity=".55">🚤</text>
+          <text x="53" y="72" fontSize="6"  opacity=".70">🚤</text>
+          <text x="74" y="19" fontSize="5"  opacity=".55">🚤</text>
+          <text x="14" y="34" fontSize="6"  opacity=".60">🚤</text>
         </svg>
         {/* Attrs pinned to bottom */}
         <div className="zone-attrs">
@@ -493,11 +521,9 @@ export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSoluti
   const [stormBurst, setStormBurst] = useState(null); // { id, x, y } or null
 
   const config = LAYERS[layer];
-  const avg    = activeSolutions.reduce((a, b) => a + b, 0) / 3;
-  const drift  = (avg / 100) * 10;
-  // Drift only in layer 2 (The Compass)
-  const linhX  = layer === 2 ? 15 + drift : 15;
-  const tomX   = layer === 2 ? 85 - drift : 85;
+  const avg   = activeSolutions.reduce((a, b) => a + b, 0) / 3;
+  const linhX = 15;
+  const tomX  = 85;
 
   const allActive  = activeSolutions.filter(v => v > 0).length === 3;
   const isComplete = layer === 2 && allActive && avg >= 78;
@@ -545,8 +571,21 @@ export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSoluti
     <div className="eco-canvas" onClick={handleCanvasClick}>
       <MapBackground layer={layer} avgIntensity={avg} activeSolutions={activeSolutions} isComplete={isComplete} />
 
-      {/* SVG connections */}
+      {/* SVG connections + Tom activity circles */}
       <svg className="canvas-svg" viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        {/* Small orbiting circles around Tom's position */}
+        {[
+          { cx: 88, cy: 38, r: 2.2 },
+          { cx: 82, cy: 43, r: 1.6 },
+          { cx: 89, cy: 45, r: 1.9 },
+          { cx: 83, cy: 36, r: 1.4 },
+          { cx: 91, cy: 41, r: 1.7 },
+          { cx: 80, cy: 44, r: 1.5 },
+        ].map((c, i) => (
+          <circle key={`tom-ring-${i}`} cx={c.cx} cy={c.cy} r={c.r}
+            fill="rgba(90,170,130,.12)" stroke="rgba(90,170,130,.28)" strokeWidth=".4"
+          />
+        ))}
         {connections.map((conn, i) => {
           const isIntensity = 'intensity' in conn;
           const t = isIntensity ? conn.intensity / 100 : 1;
