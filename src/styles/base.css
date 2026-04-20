@@ -1,9 +1,10 @@
 /* base.css */
-
 :root {
-  --bg:          #faf8f4;
-  --surface:     #f0ebe0;
-  --surface2:    #e4ddd0;
+  --bg:          #f5f2eb;
+  --canvas-bg:   #f0ece2;
+  --surface:     #e8e3d8;
+  --surface2:    #ddd7c8;
+  --card:        #ffffff;
   --ink:         #1a1814;
   --ink80:       rgba(26,24,20,.8);
   --ink60:       rgba(26,24,20,.6);
@@ -24,29 +25,30 @@
   --resolve-mid: #7ab896;
   --tension:     #b83a24;
   --tension-bg:  #fdf0ed;
+  --tension-mid: #e07860;
 
   --heading: 'Space Grotesk', sans-serif;
   --body:    'Outfit', sans-serif;
   --mono:    'JetBrains Mono', monospace;
+
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 22px;
+  --r-xl: 28px;
+  --shadow:      0 4px 20px rgba(26,24,20,.08), 0 1px 4px rgba(26,24,20,.04);
+  --shadow-up:   0 12px 40px rgba(26,24,20,.14), 0 2px 8px rgba(26,24,20,.06);
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
 
-html, body {
-  height: 100%;
-  overflow: hidden;
-}
+html, body, #root { height: 100%; overflow: hidden; }
 
 body {
-  background: var(--ink);
+  background: var(--canvas-bg);
   font-family: var(--body);
   line-height: 1.6;
   -webkit-font-smoothing: antialiased;
   color: var(--ink);
-}
-
-#root {
-  height: 100%;
 }
 
 ::selection { background: var(--amber-light); color: var(--amber-dark); }

@@ -1,37 +1,23 @@
 /* animations.css */
 
-@keyframes staggerIn {
-  from { opacity: 0; transform: translateY(20px); }
-  to   { opacity: 1; transform: translateY(0); }
+@keyframes fadeIn {
+  from { opacity: 0; }
+  to   { opacity: 1; }
 }
 
-@keyframes slideFromLeft {
-  from { opacity: 0; transform: translateX(-32px); }
-  to   { opacity: 1; transform: translateX(0); }
+@keyframes nodesIn {
+  from { opacity: 0; transform: scale(.96); }
+  to   { opacity: 1; transform: scale(1); }
 }
 
-@keyframes slideFromRight {
-  from { opacity: 0; transform: translateX(32px); }
-  to   { opacity: 1; transform: translateX(0); }
+@keyframes slideInRight {
+  from { opacity: 0; transform: translateY(-50%) translateX(16px); }
+  to   { opacity: 1; transform: translateY(-50%) translateX(0); }
 }
 
 @keyframes revealUp {
-  from { opacity: 0; transform: translateY(16px) scale(.98); }
-  to   { opacity: 1; transform: translateY(0) scale(1); }
-}
-
-@keyframes failShake {
-  0%   { transform: translateX(0); }
-  20%  { transform: translateX(-8px); }
-  40%  { transform: translateX(8px); }
-  60%  { transform: translateX(-5px); }
-  80%  { transform: translateX(5px); }
-  100% { transform: translateX(0); }
-}
-
-@keyframes drawBridge {
-  from { width: 0; }
-  to   { width: 100%; }
+  from { opacity: 0; transform: translateY(12px); }
+  to   { opacity: 1; transform: translateY(0); }
 }
 
 @keyframes blink {
@@ -39,7 +25,11 @@
   50%       { opacity: 0.3; }
 }
 
-@keyframes bobDown {
-  0%, 100% { transform: translateY(0); }
-  50%       { transform: translateY(5px); }
+/* Tension connections pulse when layer 2 is first shown */
+@keyframes connPulse {
+  0%   { stroke-opacity: 0; }
+  50%  { stroke-opacity: .7; }
+  100% { stroke-opacity: .55; }
 }
+
+.conn-tension { animation: connPulse .6s ease .2s both; }
