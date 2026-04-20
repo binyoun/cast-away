@@ -3,10 +3,10 @@
 export const NODES = {
   linh: {
     id: 'linh', type: 'char', shape: 'circle', color: 'amber',
-    letter: 'L', label: 'Linh', sub: 'Design Student',
+    letter: 'L', label: 'Linh', sub: 'Digital Media Student',
     info: {
       type: 'Character', title: 'Linh',
-      role: 'Final-year Communication Design student',
+      role: 'Digital Media student, School of Communication Design',
       attrs: ['Strong in 3D motion', 'Design-theory grounding', 'Limited client experience', 'Process-focused mindset'],
       quote: 'I spent three weeks on this concept. It\'s the most technically refined thing I\'ve ever made.'
     }
