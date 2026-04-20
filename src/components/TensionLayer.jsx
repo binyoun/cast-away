@@ -4,35 +4,29 @@ import TransformPanel from "./TransformPanel.jsx";
 
 export default function TensionLayer({ index, data, solved, onSolve }) {
   return (
-    <section className="tension-section">
+    <section>
       <div className="page-wrap">
-        <div className="section-label rv">
-          <span className="dot" style={{ background: "var(--tension)" }} />
-          <span className="label" style={{ color: "var(--tension)" }}>
-            Layer {index + 2} — Tension {index + 1}
-          </span>
-        </div>
-        <div className="tension-header">
-          <div className="tension-index rv">Conflict {index + 1} / 3</div>
-          <h2 className="rv">{data.theme}</h2>
-          <p className="conflict-text rv">{data.conflict}</p>
-        </div>
+        <div className="tension-card rv" data-number={index + 1}>
+          <div className="tension-eyebrow">
+            <span className="tension-dot" />
+            <span>Tension {index + 1} of 3</span>
+          </div>
+          <h2>{data.theme}</h2>
+          <p className="conflict-text">{data.conflict}</p>
 
-        <div className="khoa-quote rv">
-          <div className="quote-attribution">Khoa says</div>
-          <blockquote>"{data.khoa_quote}"</blockquote>
+          <div className="khoa-quote">
+            <div className="quote-who">Khoa says</div>
+            <blockquote>"{data.khoa_quote}"</blockquote>
+          </div>
+
+          <ChoiceCards
+            options={data.options}
+            solved={solved}
+            onSolve={onSolve}
+          />
+
+          <TransformPanel solved={solved} transform={data.options.b.transform} />
         </div>
-
-        <ChoiceCards
-          options={data.options}
-          solved={solved}
-          onSolve={onSolve}
-        />
-
-        <TransformPanel
-          solved={solved}
-          transform={data.options.b.transform}
-        />
       </div>
     </section>
   );
