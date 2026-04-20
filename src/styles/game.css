@@ -336,13 +336,6 @@
   animation: stormPulse 3s ease-in-out infinite;
 }
 
-/* Dim the non-focus island zone */
-.zone-dim {
-  opacity: 0.3;
-  filter: grayscale(50%);
-  transition: opacity .4s ease, filter .4s ease;
-}
-
 /* Storm-specific gap label */
 .zone-gap-label-storm {
   color: var(--tension-mid) !important;
@@ -350,11 +343,27 @@
   background: rgba(192,67,42,.14) !important;
 }
 
-/* Layer 3 nav button — tension tint when active */
-.nav-layer-btn-storm.active {
-  background: var(--tension);
-  border-color: var(--tension);
-  color: #fff;
+/* Blocked ship near academic shore */
+.ship-blocked .ship-svg {
+  filter: drop-shadow(0 3px 8px rgba(0,0,0,.35));
+  /* no glow — ship is stuck */
+}
+
+/* Storm ripple — expands from clicked tension node */
+.storm-ripple {
+  position: absolute;
+  transform: translate(-50%, -50%);
+  width: 40px; height: 40px;
+  border-radius: 50%;
+  border: 2px solid rgba(192,67,42,.75);
+  pointer-events: none;
+  z-index: 16;
+  animation: stormRipple 1s ease-out forwards;
+}
+
+/* Node burst on storm click */
+.node-storm-burst .node-body {
+  animation: stormBurst .55s ease-out;
 }
 
 /* ---- Bridge emerging overlay ---- */

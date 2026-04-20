@@ -63,15 +63,37 @@ export const NODES = {
       quote: ''
     }
   },
-  storm: {
-    id: 'storm', type: 'tension', shape: 'hex', color: 'tension',
-    letter: '⚡', label: 'The\nStorm', sub: 'Critical Breakdown',
+  t1: {
+    id: 't1', type: 'tension', shape: 'hex', color: 'tension',
+    letter: '⚡', label: 'Storm 1\nDepth vs Range', sub: 'Tension 1',
     info: {
-      type: 'Tension', title: 'The Storm',
-      role: 'The moment of breakdown — live brief with Khoa',
+      type: 'Storm', title: 'Storm 1 — Depth vs Range',
+      role: 'Specialist craft vs Jack-of-all-trades',
+      conflict: 'Linh\'s 3D craft impresses tutors but Khoa needs someone who covers more ground. Her "Beautiful Ship" took 3 weeks — that burns an entire project budget.',
       attrs: [],
-      conflict: 'Linh presents her polished, inflexible motion graphics project. Ego and anxiety override any professional response. She freezes — unable to articulate a pivot.',
-      quote: 'This visual hierarchy is too cluttered for the target audience. The colors won\'t convert. We need to strip this back and start over.'
+      quote: 'If it takes three weeks per asset, we\'d burn through the budget on one social post.'
+    }
+  },
+  t2: {
+    id: 't2', type: 'tension', shape: 'hex', color: 'tension',
+    letter: '⚡', label: 'Storm 2\nVision vs Velocity', sub: 'Tension 2',
+    info: {
+      type: 'Storm', title: 'Storm 2 — Vision vs Velocity',
+      role: 'Concept-led creativity vs client-first speed',
+      conflict: 'Linh pitches concept-led work and can\'t separate her identity from the artwork. Khoa\'s clients want brand compliance and recall metrics — not artistic vision.',
+      attrs: [],
+      quote: 'They don\'t care about the concept. They care if the logo reads at 80px on a phone.'
+    }
+  },
+  t3: {
+    id: 't3', type: 'tension', shape: 'hex', color: 'tension',
+    letter: '⚡', label: 'Storm 3\nCraft vs Pressure', sub: 'Tension 3',
+    info: {
+      type: 'Storm', title: 'Storm 3 — Craft vs Pressure',
+      role: 'Academic pacing vs agency velocity',
+      conflict: 'Linh\'s programme rewarded careful revision. Khoa\'s agency runs on compressed timelines. When Khoa delivers blunt feedback, Linh freezes — the system breaks down.',
+      attrs: [],
+      quote: 'We had an intern who couldn\'t ship without three rounds of sign-off. We couldn\'t keep them.'
     }
   },
   s1: {
@@ -126,33 +148,19 @@ export const NODES = {
 
 export const LAYERS = {
   1: {
-    label: 'The Island',
-    sub: 'Meet Linh — click nodes to explore',
-    nodePositions: [
-      { id: 'academic', x: 14, y: 22 },
-      { id: 'linh',     x: 30, y: 54 },
-    ]
-  },
-  2: {
-    label: 'The Rescue Ship',
-    sub: 'Meet Khoa — click nodes to explore',
-    nodePositions: [
-      { id: 'khoa',     x: 70, y: 54 },
-      { id: 'industry', x: 86, y: 22 },
-    ]
-  },
-  3: {
-    label: 'The Storm',
-    sub: 'Critical breakdown — click nodes to explore',
+    label: 'The Gap',
+    sub: 'Situation & Tensions — click nodes to explore',
     nodePositions: [
       { id: 'academic', x: 10, y: 20 },
       { id: 'linh',     x: 20, y: 55 },
-      { id: 'storm',    x: 50, y: 46 },
+      { id: 't1',       x: 50, y: 16 },
+      { id: 't2',       x: 50, y: 50 },
+      { id: 't3',       x: 50, y: 83 },
       { id: 'khoa',     x: 80, y: 55 },
       { id: 'industry', x: 90, y: 20 },
     ]
   },
-  4: {
+  2: {
     label: 'The Compass',
     sub: 'IPL Interventions — drag sliders to apply',
     nodePositions: [
@@ -174,28 +182,22 @@ function cp(ax, ay, bx, by, bow = 6) {
 export function getConnections(layerId, activeSolutions, linhX = 20, khoaX = 80) {
   const lY = 55, kY = 55;
 
+  // Layer 1: amber + slate + 6 tension lines (linh/khoa → t1, t2, t3)
   if (layerId === 1) {
     return [
-      { from: {x:14,y:22}, to: {x:30,y:lY}, cp: cp(14,22,30,lY,4), color: 'amber', dash: false },
+      { from:{x:10,y:20}, to:{x:20,y:55},  cp: cp(10,20,20,55,4),  color:'amber',   dash:false },
+      { from:{x:90,y:20}, to:{x:80,y:55},  cp: cp(90,20,80,55,4),  color:'slate',   dash:false },
+      { from:{x:20,y:55}, to:{x:50,y:16},  cp: cp(20,55,50,16,8),  color:'tension', dash:false },
+      { from:{x:20,y:55}, to:{x:50,y:50},  cp: cp(20,55,50,50,6),  color:'tension', dash:false },
+      { from:{x:20,y:55}, to:{x:50,y:83},  cp: cp(20,55,50,83,6),  color:'tension', dash:false },
+      { from:{x:80,y:55}, to:{x:50,y:16},  cp: cp(80,55,50,16,8),  color:'tension', dash:false },
+      { from:{x:80,y:55}, to:{x:50,y:50},  cp: cp(80,55,50,50,6),  color:'tension', dash:false },
+      { from:{x:80,y:55}, to:{x:50,y:83},  cp: cp(80,55,50,83,6),  color:'tension', dash:false },
     ];
   }
 
+  // Layer 2: amber + slate + 6 intensity paths (dynamic linhX/khoaX)
   if (layerId === 2) {
-    return [
-      { from: {x:86,y:22}, to: {x:70,y:kY}, cp: cp(86,22,70,kY,4), color: 'slate', dash: false },
-    ];
-  }
-
-  if (layerId === 3) {
-    return [
-      { from: {x:10,y:20}, to: {x:20,y:lY},  cp: cp(10,20,20,lY,4),  color: 'amber',   dash: false },
-      { from: {x:90,y:20}, to: {x:80,y:kY},  cp: cp(90,20,80,kY,4),  color: 'slate',   dash: false },
-      { from: {x:20,y:lY}, to: {x:50,y:46},  cp: cp(20,lY,50,46,8),  color: 'tension', dash: false },
-      { from: {x:80,y:kY}, to: {x:50,y:46},  cp: cp(80,kY,50,46,8),  color: 'tension', dash: false },
-    ];
-  }
-
-  if (layerId === 4) {
     const make = (sx, sy, idx) => {
       const t = activeSolutions[idx] / 100;
       const bow = 6 + t * 10;
