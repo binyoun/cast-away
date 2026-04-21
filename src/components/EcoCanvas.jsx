@@ -231,11 +231,6 @@ function MapBackground({ layer, avgIntensity, activeSolutions, isComplete }) {
             style={{ opacity: Math.min(1, (avgIntensity - 58) / 32) }}
           >
             <div className="bridge-glow" />
-            <span className="bridge-emerging-label">Employability 5.0</span>
-            <span className="bridge-emerging-quote">
-              "Understood. If we use AI to quickly re-render,<br />
-              I can have mockups by end of day."
-            </span>
           </div>
         )}
         <span className={`zone-gap-label${gapLabelStorm ? ' zone-gap-label-storm' : ''}`}>{gapLabel}</span>
