@@ -12,7 +12,7 @@ export default function LayerNav({ current, onChange, activeSolutions }) {
   return (
     <nav className="layer-nav">
       <div className="nav-brand">
-        <span className="nav-brand-title">Cast Away</span>
+        <span className="nav-brand-title">Navigating Cast Away</span>
         <span className="nav-brand-sub">IPL Ecosystem Map</span>
       </div>
 
