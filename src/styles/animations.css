@@ -48,6 +48,12 @@
   to   { width: 200px; height: 200px; opacity: 0;   }
 }
 
+/* Island float — gentle bob for star shape and archipelago SVGs */
+@keyframes islandFloat {
+  0%, 100% { transform: translate(-50%, -50%) translateY(0px); }
+  50%       { transform: translate(-50%, -50%) translateY(-8px); }
+}
+
 /* Fast boat drift in Industry Hub */
 @keyframes fastBoatDrift {
   0%,100% { transform: translateX(0); }

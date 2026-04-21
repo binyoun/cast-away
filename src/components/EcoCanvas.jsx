@@ -172,6 +172,25 @@ function MapBackground({ layer, avgIntensity, activeSolutions, isComplete }) {
       {/* Ocean gap */}
       <div className="zone zone-gap">
         <span className="zone-ocean-label">Digital Media Ocean</span>
+
+        {/* Animated ocean waves — purely decorative */}
+        <svg className="ocean-waves-svg" viewBox="0 0 100 100" aria-hidden="true">
+          {/* Layer A: scrolls left at 9s */}
+          <g>
+            <animateTransform attributeName="transform" type="translate" from="0 0" to="-25 0" dur="9s" repeatCount="indefinite"/>
+            <path d="M-25,20 Q-12.5,14 0,20 Q12.5,26 25,20 Q37.5,14 50,20 Q62.5,26 75,20 Q87.5,14 100,20 Q112.5,26 125,20" fill="none" stroke="rgba(100,170,220,.13)" strokeWidth="1.2" strokeLinecap="round"/>
+            <path d="M-25,42 Q-12.5,37 0,42 Q12.5,47 25,42 Q37.5,37 50,42 Q62.5,47 75,42 Q87.5,37 100,42 Q112.5,47 125,42" fill="none" stroke="rgba(100,170,220,.09)" strokeWidth="0.9" strokeLinecap="round"/>
+            <path d="M-25,63 Q-12.5,59 0,63 Q12.5,67 25,63 Q37.5,59 50,63 Q62.5,67 75,63 Q87.5,59 100,63 Q112.5,67 125,63" fill="none" stroke="rgba(100,170,220,.07)" strokeWidth="0.7" strokeLinecap="round"/>
+            <path d="M-25,82 Q-12.5,79 0,82 Q12.5,85 25,82 Q37.5,79 50,82 Q62.5,85 75,82 Q87.5,79 100,82 Q112.5,85 125,82" fill="none" stroke="rgba(100,170,220,.05)" strokeWidth="0.5" strokeLinecap="round"/>
+          </g>
+          {/* Layer B: scrolls right at 14s — creates depth parallax */}
+          <g>
+            <animateTransform attributeName="transform" type="translate" from="0 0" to="25 0" dur="14s" repeatCount="indefinite"/>
+            <path d="M-25,31 Q-12.5,27 0,31 Q12.5,35 25,31 Q37.5,27 50,31 Q62.5,35 75,31 Q87.5,27 100,31 Q112.5,35 125,31" fill="none" stroke="rgba(100,170,220,.06)" strokeWidth="0.6" strokeLinecap="round"/>
+            <path d="M-25,72 Q-12.5,69 0,72 Q12.5,75 25,72 Q37.5,69 50,72 Q62.5,75 75,72 Q87.5,69 100,72 Q112.5,75 125,72" fill="none" stroke="rgba(100,170,220,.05)" strokeWidth="0.5" strokeLinecap="round"/>
+          </g>
+        </svg>
+
         <ConceptNote layer={layer} topPct={layer === 1 ? 65 : 10} />
         {showStorm && <StormOverlay />}
         {isComplete && (
