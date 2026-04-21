@@ -385,6 +385,7 @@
   stroke: var(--tension);
   stroke-opacity: .75;
   stroke-width: 1.1;
+  filter: drop-shadow(0 0 1.5px rgba(192,67,42,.5));
   stroke-linecap: round;
   stroke-linejoin: round;
   animation: lightningFlash 2.4s ease-in-out infinite;
@@ -641,7 +642,7 @@
   cursor: pointer;
   z-index: 10;
   user-select: none;
-  transition: left .6s cubic-bezier(.25,.46,.45,.94), top .6s cubic-bezier(.25,.46,.45,.94), transform .2s ease;
+  transition: transform .2s ease;
 }
 
 .node:hover       { transform: translate(-50%, -50%) scale(1.08); }
@@ -658,7 +659,7 @@
 
 .node-circle  .node-body { width: 74px; height: 74px; border-radius: 50%; }
 .node-hex     .node-body { width: 68px; height: 68px; clip-path: polygon(50% 0%,100% 25%,100% 75%,50% 100%,0% 75%,0% 25%); }
-.node-diamond .node-body { width: 62px; height: 62px; clip-path: polygon(50% 0%,100% 50%,50% 100%,0% 50%); }
+.node-diamond .node-body { width: 62px; height: 62px; clip-path: polygon(50% 0%,100% 50%,50% 100%,0% 50%); filter: grayscale(var(--gs, 90%)); opacity: var(--op, 0.3); }
 .node-rect    .node-body { width: 110px; height: 44px; border-radius: 10px; }
 
 .node.node-active .node-body {
@@ -922,9 +923,11 @@
     rgba(40,32,12,.96) 35%,
     rgba(20,40,36,.96) 70%,
     rgba(18,32,28,.96) 100%);
-  backdrop-filter: blur(16px);
   border-top: 1px solid rgba(255,210,80,.25);
   box-shadow: 0 -12px 60px rgba(0,0,0,.5), 0 -1px 0 rgba(255,210,80,.15);
+}
+.final-outcome.final-visible .final-inner {
+  backdrop-filter: blur(16px);
 }
 
 /* ---- Sun animation ---- */

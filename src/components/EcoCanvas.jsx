@@ -1,5 +1,24 @@
-import React, { useState } from "react";
+import React, { useState, useEffect, memo } from "react";
 import { NODES, LAYERS, getConnections } from "../data/ecosystem.js";
+
+// Pre-calculated ray coordinates — computed once at module load, never on render
+const COMPASS_TICKS = [0,45,90,135,180,225,270,315].map(deg => {
+  const rad = (deg - 90) * Math.PI / 180;
+  const r1 = 23, r2 = deg % 90 === 0 ? 18.5 : 20.5;
+  return { deg, x1: 30+r1*Math.cos(rad), y1: 30+r1*Math.sin(rad), x2: 30+r2*Math.cos(rad), y2: 30+r2*Math.sin(rad), thick: deg % 90 === 0 };
+});
+
+const SUN_RAYS = [0,45,90,135,180,225,270,315].map(deg => {
+  const rad = deg * Math.PI / 180;
+  const r1 = 22, r2 = deg % 90 === 0 ? 30 : 27;
+  return { deg, x1: 40+r1*Math.cos(rad), y1: 40+r1*Math.sin(rad), x2: 40+r2*Math.cos(rad), y2: 40+r2*Math.sin(rad), thick: deg % 90 === 0 };
+});
+
+const OCEAN_SUN_RAYS = [0,30,60,90,120,150,180,210,240,270,300,330].map(deg => {
+  const rad = deg * Math.PI / 180;
+  const r1 = 33, r2 = deg % 90 === 0 ? 54 : 46;
+  return { deg, x1: 70+r1*Math.cos(rad), y1: 70+r1*Math.sin(rad), x2: 70+r2*Math.cos(rad), y2: 70+r2*Math.sin(rad), thick: deg % 90 === 0 };
+});
 
 // ---- Lightning zigzag path (replaces smooth bezier for tension connections) ----
 function lightningPath(x1, y1, x2, y2, segs = 7, amp = 2.5) {
@@ -162,18 +181,12 @@ function MapBackground({ layer, avgIntensity, activeSolutions, isComplete }) {
               <circle cx="70" cy="70" r="56" fill="rgba(255,210,80,.04)" stroke="rgba(255,210,80,.08)" strokeWidth="1"/>
               <circle cx="70" cy="70" r="42" fill="rgba(255,210,80,.06)" stroke="rgba(255,210,80,.10)" strokeWidth="1"/>
               {/* Rays */}
-              {[0,30,60,90,120,150,180,210,240,270,300,330].map(deg => {
-                const rad = deg * Math.PI / 180;
-                const r1 = 33, r2 = deg % 90 === 0 ? 54 : 46;
-                return (
-                  <line key={deg}
-                    x1={70 + r1 * Math.cos(rad)} y1={70 + r1 * Math.sin(rad)}
-                    x2={70 + r2 * Math.cos(rad)} y2={70 + r2 * Math.sin(rad)}
-                    stroke="rgba(255,210,80,.38)" strokeWidth={deg % 90 === 0 ? 3 : 1.8}
-                    strokeLinecap="round"
-                  />
-                );
-              })}
+              {OCEAN_SUN_RAYS.map(({ deg, x1, y1, x2, y2, thick }) => (
+                <line key={deg} x1={x1} y1={y1} x2={x2} y2={y2}
+                  stroke="rgba(255,210,80,.38)" strokeWidth={thick ? 3 : 1.8}
+                  strokeLinecap="round"
+                />
+              ))}
               {/* Core — transparent glowing disc */}
               <circle cx="70" cy="70" r="26" fill="rgba(255,225,100,.28)" stroke="rgba(255,210,80,.22)" strokeWidth="1.5"/>
               <circle cx="70" cy="70" r="17" fill="rgba(255,248,200,.20)"/>
@@ -297,17 +310,11 @@ function Compass({ onClick }) {
     >
       <svg viewBox="0 0 60 60" className="compass-svg" aria-hidden="true">
         <circle cx="30" cy="30" r="27" fill="rgba(46,95,120,.75)" stroke="rgba(255,255,255,.3)" strokeWidth="1.2"/>
-        {[0,45,90,135,180,225,270,315].map(deg => {
-          const rad = (deg - 90) * Math.PI / 180;
-          const r1 = 23, r2 = deg % 90 === 0 ? 18.5 : 20.5;
-          return (
-            <line key={deg}
-              x1={30 + r1 * Math.cos(rad)} y1={30 + r1 * Math.sin(rad)}
-              x2={30 + r2 * Math.cos(rad)} y2={30 + r2 * Math.sin(rad)}
-              stroke="rgba(255,255,255,.3)" strokeWidth={deg % 90 === 0 ? 1.5 : .9}
-            />
-          );
-        })}
+        {COMPASS_TICKS.map(({ deg, x1, y1, x2, y2, thick }) => (
+          <line key={deg} x1={x1} y1={y1} x2={x2} y2={y2}
+            stroke="rgba(255,255,255,.3)" strokeWidth={thick ? 1.5 : .9}
+          />
+        ))}
         <path d="M30 8 L33.5 28 L30 25 L26.5 28 Z" fill="var(--amber)" opacity=".95"/>
         <path d="M30 52 L33.5 32 L30 35 L26.5 32 Z" fill="rgba(255,255,255,.38)"/>
         <path d="M52 30 L32 33.5 L35 30 L32 26.5 Z" fill="rgba(255,255,255,.38)"/>
@@ -337,18 +344,19 @@ function MapLegend({ layer, visible }) {
   );
 }
 
-// ---- Node ----
-function Node({ nodeId, x, y, layer, activeSolutions, activeNode, onNodeClick, onSetIntensity, isBursting }) {
+// ---- Node (memoized — only re-renders when its own props change) ----
+const Node = memo(function Node({ nodeId, x, y, layer, intensity, activeNode, onNodeClick, onSetIntensity, isBursting }) {
   const def        = NODES[nodeId];
   const isActive   = activeNode === nodeId;
   const isSolution = def.type === 'solution';
   const solveIdx   = isSolution ? def.solveIndex : -1;
-  const intensity  = isSolution ? activeSolutions[solveIdx] : 0;
   const t          = intensity / 100;
 
-  const bodyStyle = isSolution
-    ? { filter: `grayscale(${Math.round((1 - t) * 90)}%)`, opacity: 0.3 + t * 0.7 }
-    : {};
+  // CSS custom properties let the browser handle filter/opacity without React re-renders
+  const nodeStyle = {
+    left: `${x}%`, top: `${y}%`,
+    ...(isSolution && { '--gs': `${Math.round((1 - t) * 90)}%`, '--op': 0.3 + t * 0.7 }),
+  };
   const glowStyle = isSolution && intensity > 40
     ? { boxShadow: `0 0 ${Math.round(t * 32)}px rgba(58,122,86,${(t * 0.6).toFixed(2)}), 0 4px 18px rgba(0,0,0,.35)` }
     : {};
@@ -356,11 +364,11 @@ function Node({ nodeId, x, y, layer, activeSolutions, activeNode, onNodeClick, o
   return (
     <div
       className={`node node-${def.shape}${isActive ? ' node-active' : ''}${isSolution && intensity > 0 ? ' node-on' : ''}${isBursting ? ' node-storm-burst' : ''}`}
-      style={{ left: `${x}%`, top: `${y}%` }}
+      style={nodeStyle}
       onClick={e => { e.stopPropagation(); onNodeClick(nodeId); }}
       role="button" tabIndex={0}
     >
-      <div className={`node-body color-${def.color}`} style={{ ...bodyStyle, ...glowStyle }}>
+      <div className={`node-body color-${def.color}`} style={glowStyle}>
         <span className="node-letter">{def.letter}</span>
       </div>
       <div className="node-meta">
@@ -388,7 +396,7 @@ function Node({ nodeId, x, y, layer, activeSolutions, activeNode, onNodeClick, o
       )}
     </div>
   );
-}
+});
 
 // ---- Info panel ----
 function InfoPanel({ nodeId, layer, activeSolutions, onSetIntensity, onClose, style }) {
@@ -442,18 +450,12 @@ function SunIcon() {
   return (
     <svg className="resolution-sun" viewBox="0 0 80 80" fill="none" aria-hidden="true">
       <circle cx="40" cy="40" r="16" fill="rgba(255,210,80,.95)"/>
-      {[0,45,90,135,180,225,270,315].map(deg => {
-        const rad = deg * Math.PI / 180;
-        const r1 = 22, r2 = deg % 90 === 0 ? 30 : 27;
-        return (
-          <line key={deg}
-            x1={40 + r1 * Math.cos(rad)} y1={40 + r1 * Math.sin(rad)}
-            x2={40 + r2 * Math.cos(rad)} y2={40 + r2 * Math.sin(rad)}
-            stroke="rgba(255,210,80,.7)" strokeWidth={deg % 90 === 0 ? 2.5 : 1.8}
-            strokeLinecap="round"
-          />
-        );
-      })}
+      {SUN_RAYS.map(({ deg, x1, y1, x2, y2, thick }) => (
+        <line key={deg} x1={x1} y1={y1} x2={x2} y2={y2}
+          stroke="rgba(255,210,80,.7)" strokeWidth={thick ? 2.5 : 1.8}
+          strokeLinecap="round"
+        />
+      ))}
       <circle cx="40" cy="40" r="16" fill="rgba(255,220,100,1)"/>
       <circle cx="40" cy="40" r="10" fill="rgba(255,245,180,1)"/>
     </svg>
@@ -518,7 +520,14 @@ function FinalOutcome({ activeSolutions, visible }) {
 // ---- Main canvas ----
 export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSolutions, onSetIntensity }) {
   const [showLegend, setShowLegend] = useState(false);
-  const [stormBurst, setStormBurst] = useState(null); // { id, x, y } or null
+  const [stormBurst, setStormBurst] = useState(null);
+
+  // Cleanup stormBurst timeout — prevents setState on unmounted component
+  useEffect(() => {
+    if (!stormBurst) return;
+    const timer = setTimeout(() => setStormBurst(null), 1100);
+    return () => clearTimeout(timer);
+  }, [stormBurst]);
 
   const config = LAYERS[layer];
   const avg   = activeSolutions.reduce((a, b) => a + b, 0) / 3;
@@ -541,7 +550,6 @@ export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSoluti
       const pos = config.nodePositions.find(p => p.id === nodeId);
       if (pos) {
         setStormBurst({ id: nodeId, x: pos.x, y: pos.y });
-        setTimeout(() => setStormBurst(null), 1100);
       }
     }
     onNodeClick(nodeId);
@@ -629,13 +637,15 @@ export default function EcoCanvas({ layer, activeNode, onNodeClick, activeSoluti
       <div key={`nl-${layer}`} className="nodes-layer">
         {config.nodePositions.map(pos => {
           const resolved = posFor(pos.id, pos);
+          const def = NODES[pos.id];
+          const nodeIntensity = def?.type === 'solution' ? activeSolutions[def.solveIndex] : 0;
           return (
             <Node
               key={pos.id}
               nodeId={pos.id}
               x={resolved.x} y={resolved.y}
               layer={layer}
-              activeSolutions={activeSolutions}
+              intensity={nodeIntensity}
               activeNode={activeNode}
               onNodeClick={handleNodeClickWithStorm}
               onSetIntensity={onSetIntensity}
