@@ -12,8 +12,8 @@ export default function LayerNav({ current, onChange, activeSolutions }) {
   return (
     <nav className="layer-nav">
       <div className="nav-brand">
-        <span className="nav-brand-title">Cast Away</span>
-        <span className="nav-brand-sub">From Star Island to Industry Hub</span>
+        <span className="nav-brand-title">Cast Away: From Star Island to Industry Hub</span>
+        <span className="nav-brand-sub">IPL Ecosystem Map</span>
       </div>
 
       <div className="nav-layers">
