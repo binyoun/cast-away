@@ -38,6 +38,11 @@ export default function App() {
         activeSolutions={activeSolutions}
         onSetIntensity={handleSetIntensity}
       />
+      <footer className="app-footer">
+        <span className="footer-course">TCHE2694 · Learning and Teaching in Industry Partnerships</span>
+        <span className="footer-divider">|</span>
+        <span className="footer-group">Graduate Certificate in Tertiary Learning &amp; Teaching · Group 1 · 2026 Semester 1</span>
+      </footer>
     </div>
   );
 }

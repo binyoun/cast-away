@@ -7,6 +7,38 @@
   overflow: hidden;
 }
 
+/* ---- Footer ---- */
+.app-footer {
+  height: 26px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  gap: 10px;
+  background: var(--ocean-deep);
+  border-top: 1px solid rgba(255,255,255,.06);
+  flex-shrink: 0;
+  z-index: 30;
+}
+
+.footer-course {
+  font-family: var(--mono);
+  font-size: .58rem;
+  color: rgba(255,255,255,.28);
+  letter-spacing: .04em;
+}
+
+.footer-group {
+  font-family: var(--mono);
+  font-size: .58rem;
+  color: rgba(255,255,255,.18);
+  letter-spacing: .04em;
+}
+
+.footer-divider {
+  font-size: .58rem;
+  color: rgba(255,255,255,.1);
+}
+
 /* ---- Layer nav ---- */
 .layer-nav {
   height: 60px;
