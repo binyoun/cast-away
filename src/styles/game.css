@@ -648,6 +648,7 @@
 .node.node-active { transform: translate(-50%, -50%) scale(1.12); z-index: 15; }
 
 .node-body {
+  position: relative; /* positioning context for ::after drop-shadow */
   display: flex;
   align-items: center;
   justify-content: center;
@@ -676,8 +677,6 @@
   border-radius: 50%;
   pointer-events: none;
 }
-.node-circle { position: relative; }
-
 .color-amber   { background: var(--amber);   color: var(--amber); }
 .color-slate   { background: var(--slate);   color: var(--slate); }
 .color-tension { background: var(--tension); color: var(--tension); }
