@@ -503,12 +503,6 @@ function FinalOutcome({ activeSolutions, visible }) {
             Linh no longer freezes. Operating with clear Theory of Mind, she has become
             an Adaptive Practitioner — turning academic insight into industry value.
           </p>
-          <blockquote className="final-quote">
-            "Understood. If we use AI to quickly re-render the middle sequence with the
-            brand's primary palette and simplify the 3D assets, we can hit that target.
-            Let's look at a quick mockup."
-            <cite>— Linh, responding to Tom's brief</cite>
-          </blockquote>
         </div>
 
         {/* Right column */}
