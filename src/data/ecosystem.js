@@ -68,32 +68,30 @@ export const NODES = {
   },
   s1: {
     id: 's1', type: 'solution', shape: 'diamond', color: 'resolve',
-    letter: '✦', label: 'AI\nPrototyping', sub: 'Solution 1',
+    letter: '✦', label: 'AI Divergent\nSprints', sub: 'Solution 1',
     resolves: 'storm', solveIndex: 0,
     info: {
-      type: 'IPL Intervention', title: 'AI Prototyping Sprint',
+      type: 'IPL Intervention', title: 'AI-Assisted Divergent Sprints',
       role: 'Lowering Attachment',
       attrs: [
-        '50 rapid iterations in an hour',
-        'Dismantles ego by externalising authorship',
-        'Builds iteration speed and multi-format range',
-        'Selective craft polish on chosen direction'
+        '1-Week Rapid Prototyping: AI generates multiple distinct conceptual directions for a single brief',
+        'Dismantling Ego: Teaches students not to treat their first draft as precious — avoiding the "Beautiful Ship" trap',
+        'Building Velocity: Develops the agile iteration speed required by modern agencies'
       ],
       quote: 'Linh now ships a brand board, reel frame, and deck mockup in one afternoon — then polishes the one the client picks.'
     }
   },
   s2: {
     id: 's2', type: 'solution', shape: 'diamond', color: 'resolve',
-    letter: '✦', label: 'Critique\nBoards', sub: 'Solution 2',
+    letter: '✦', label: 'Industry\nCritique', sub: 'Solution 2',
     resolves: 'storm', solveIndex: 1,
     info: {
-      type: 'IPL Intervention', title: 'Shared Critique Boards',
+      type: 'IPL Intervention', title: 'Industry-Integrated Critique',
       role: 'Building Theory of Mind',
       attrs: [
-        'Objective rubric-based feedback with peers',
-        'Separates identity from artwork',
-        'Live industry voice in the room',
-        'Rationale held lightly — argue and revise in same session'
+        'Real-World Feedback Loops: Replaces rigid academic rubrics with guest judging from actual industry professionals',
+        'Team-Based Decoding: Students collaborate to deconstruct and implement professional feedback',
+        'Separating Identity from Art: Develops a client-focused perspective rather than taking critique personally'
       ],
       quote: 'Linh learns to hold her design rationale lightly — she can argue for a choice and revise it in the same session.'
     }
@@ -103,13 +101,12 @@ export const NODES = {
     letter: '✦', label: 'Cross-Cultural\nHackathon', sub: 'Solution 3',
     resolves: 'storm', solveIndex: 2,
     info: {
-      type: 'IPL Intervention', title: 'Cross-Cultural Hackathon',
+      type: 'IPL Intervention', title: 'Cross-Cultural Hackathons',
       role: 'Safe Exposure',
       attrs: [
-        'Simulates agency pressure in a safe environment',
-        'Short-circuits academic pacing vs industry velocity',
-        'Mixed-team comfort under constraint',
-        'Builds tolerance for productive imperfection'
+        'Simulated Agency Pressure: High-intensity events (e.g. M-NODE collaboration) provide a safe environment to fail and iterate',
+        'Pedagogical "Short Circuit": Forces students to operate at sprint speed',
+        'Emotional Resilience: Bridges the gap between slow academic pacing and high-velocity industry reality'
       ],
       quote: 'Linh now has a story: "I shipped a working prototype in 48 hours with a team I\'d never met." That sentence is worth more than any portfolio piece.'
     }

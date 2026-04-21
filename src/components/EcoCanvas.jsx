@@ -463,9 +463,9 @@ function SunIcon() {
 // ---- Final outcome panel ----
 function FinalOutcome({ activeSolutions, visible }) {
   const items = [
-    { label: 'AI Prototyping Sprint',    idx: 0 },
-    { label: 'Shared Critique Boards',   idx: 1 },
-    { label: 'Cross-Cultural Hackathon', idx: 2 },
+    { label: 'AI-Assisted Divergent Sprints',  idx: 0 },
+    { label: 'Industry-Integrated Critique',   idx: 1 },
+    { label: 'Cross-Cultural Hackathons',       idx: 2 },
   ];
   return (
     <div className={`final-outcome${visible ? ' final-visible' : ''}`} aria-live="polite">
