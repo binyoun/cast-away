@@ -42,13 +42,13 @@ export const tensions = [
           "Stalls progress. Linh deepens what she already knows; the range gap widens. Khoa moves on to the next candidate.",
       },
       b: {
-        label: "Intervention: AI Prototyping Sprint",
+        label: "Intervention: AI-Assisted Divergent Sprints",
         outcome:
-          "Linh learns to use AI image-gen and motion tools to produce rough multi-format drafts in hours. She keeps her craft eye while gaining the pace Khoa needs.",
+          "Drawing on Google Sprint Methodology, Linh runs compressed diverge-and-converge cycles using AI image-gen and motion tools — producing rough multi-format drafts in hours. She keeps her craft eye while gaining the pace Tom needs.",
         transform: {
-          name: "AI Prototyping Sprint",
+          name: "AI-Assisted Divergent Sprints",
           linh_change:
-            "Linh now ships a rough brand board, a reel frame, and a deck mockup in a single afternoon — then polishes the one the client picks.",
+            "Using a Google Sprint-informed structure, Linh now ships a rough brand board, a reel frame, and a deck mockup in a single afternoon — then polishes the one the client picks.",
           before: ["Specialist only", "Slow iteration", "One format at a time"],
           after: [
             "Rapid multi-format",
