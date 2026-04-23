@@ -31,6 +31,7 @@ export default function LayerNav({ current, onChange, activeSolutions }) {
       </div>
 
       <div className="nav-meta">
+        <a href="guide/" className="nav-guide-link">Navigator</a>
         {current === 2 ? (
           <span className={`solve-counter${active === 3 && avg >= 90 ? ' complete' : ''}`}>
             {active}/3 solutions · {avg}% avg

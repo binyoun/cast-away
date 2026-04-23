@@ -1,0 +1,802 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Navigator — Cast Away: IPL Ecosystem Map</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@400;500;600;700&family=Outfit:wght@300;400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet" />
+  <style>
+    *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
+
+    :root {
+      --ocean:        #c8e0ec;
+      --ocean-deep:   #a8cce0;
+      --ocean-light:  #e0eff7;
+      --surface:      #ffffff;
+      --surface2:     #f0f4f2;
+      --ink:          #1a1814;
+      --ink80:        rgba(26,24,20,.8);
+      --ink60:        rgba(26,24,20,.6);
+      --ink40:        rgba(26,24,20,.4);
+      --ink20:        rgba(26,24,20,.12);
+      --amber:        #c97d38;
+      --amber-light:  #f5e6d3;
+      --amber-dark:   #7a4a1e;
+      --tension:      #b83520;
+      --tension-bg:   #fdf0ed;
+      --resolve:      #2e6a44;
+      --resolve-bg:   #e8f5ee;
+      --resolve-mid:  #5a9e78;
+      --slate:        #3d7055;
+      --slate-light:  rgba(90,144,112,.18);
+      --heading: 'Space Grotesk', sans-serif;
+      --body:    'Outfit', sans-serif;
+      --mono:    'JetBrains Mono', monospace;
+      --r-sm: 8px;
+      --r-md: 14px;
+      --r-lg: 20px;
+      --r-xl: 28px;
+    }
+
+    html { scroll-behavior: smooth; }
+
+    body {
+      background: var(--ocean-light);
+      font-family: var(--body);
+      color: var(--ink);
+      line-height: 1.6;
+      -webkit-font-smoothing: antialiased;
+    }
+
+    /* ---- Nav ---- */
+    .guide-nav {
+      position: sticky;
+      top: 0;
+      background: var(--surface);
+      border-bottom: 1px solid var(--ink20);
+      z-index: 50;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 32px;
+      height: 56px;
+    }
+
+    .guide-nav-brand {
+      font-family: var(--heading);
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--ink);
+    }
+
+    .guide-nav-brand span {
+      color: var(--amber);
+    }
+
+    .back-link {
+      font-family: var(--mono);
+      font-size: .65rem;
+      color: var(--ink40);
+      text-decoration: none;
+      letter-spacing: .04em;
+      transition: color .15s;
+    }
+    .back-link:hover { color: var(--amber); }
+
+    /* ---- Layout ---- */
+    .guide-wrap {
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 64px 32px 120px;
+    }
+
+    /* ---- Page header ---- */
+    .guide-header {
+      margin-bottom: 72px;
+    }
+
+    .guide-eyebrow {
+      font-family: var(--mono);
+      font-size: .65rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--amber);
+      margin-bottom: 20px;
+    }
+
+    .guide-header h1 {
+      font-family: var(--heading);
+      font-size: clamp(2.2rem, 5vw, 3.4rem);
+      font-weight: 700;
+      letter-spacing: -.03em;
+      color: var(--ink);
+      line-height: 1.05;
+      margin-bottom: 20px;
+    }
+
+    .guide-header p {
+      font-size: 1.05rem;
+      color: var(--ink60);
+      max-width: 560px;
+      line-height: 1.75;
+    }
+
+    /* ---- Sections ---- */
+    .guide-section {
+      margin-bottom: 72px;
+    }
+
+    .section-label {
+      font-family: var(--mono);
+      font-size: .6rem;
+      letter-spacing: .1em;
+      text-transform: uppercase;
+      color: var(--ink40);
+      margin-bottom: 12px;
+    }
+
+    .guide-section h2 {
+      font-family: var(--heading);
+      font-size: 1.5rem;
+      font-weight: 700;
+      letter-spacing: -.02em;
+      color: var(--ink);
+      margin-bottom: 16px;
+    }
+
+    .guide-section > p {
+      font-size: .95rem;
+      color: var(--ink60);
+      line-height: 1.75;
+      max-width: 620px;
+      margin-bottom: 32px;
+    }
+
+    /* ---- Symbol table ---- */
+    .symbol-list {
+      display: flex;
+      flex-direction: column;
+      gap: 2px;
+    }
+
+    .symbol-row {
+      display: grid;
+      grid-template-columns: 200px 1fr;
+      gap: 0;
+      border-radius: var(--r-sm);
+      overflow: hidden;
+    }
+
+    .symbol-key {
+      background: var(--surface);
+      padding: 18px 20px;
+      border-right: 1px solid var(--ink20);
+    }
+
+    .symbol-name {
+      font-family: var(--heading);
+      font-size: .85rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 4px;
+      line-height: 1.3;
+    }
+
+    .symbol-tag {
+      display: inline-block;
+      font-family: var(--mono);
+      font-size: .58rem;
+      letter-spacing: .05em;
+      text-transform: uppercase;
+      padding: 2px 8px;
+      border-radius: 100px;
+      margin-top: 4px;
+    }
+
+    .tag-amber  { background: var(--amber-light); color: var(--amber-dark); }
+    .tag-slate  { background: var(--slate-light); color: var(--slate); }
+    .tag-red    { background: var(--tension-bg); color: var(--tension); }
+    .tag-green  { background: var(--resolve-bg); color: var(--resolve); }
+    .tag-ink    { background: var(--surface2); color: var(--ink60); }
+
+    .symbol-val {
+      background: var(--surface);
+      padding: 18px 24px;
+      font-size: .88rem;
+      color: var(--ink60);
+      line-height: 1.7;
+    }
+
+    /* visual swatch inside symbol-key */
+    .swatch-ship {
+      width: 32px; height: 20px;
+      display: block; margin-bottom: 6px;
+    }
+
+    .sym-icon {
+      font-size: 1.1rem;
+      display: block;
+      margin-bottom: 4px;
+    }
+
+    /* ---- Node diagram ---- */
+    .node-diagram {
+      display: flex;
+      gap: 16px;
+      flex-wrap: wrap;
+      margin-bottom: 32px;
+    }
+
+    .node-sample {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: var(--surface);
+      border-radius: var(--r-md);
+      padding: 14px 18px;
+      flex: 1;
+      min-width: 180px;
+    }
+
+    .node-dot {
+      width: 40px; height: 40px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-family: var(--heading);
+      font-size: 1rem;
+      font-weight: 700;
+      color: #fff;
+      flex-shrink: 0;
+    }
+    .node-dot.amber { background: var(--amber); }
+    .node-dot.slate { background: var(--slate); }
+
+    .node-hex-shape {
+      width: 40px; height: 40px;
+      clip-path: polygon(50% 0%,93% 25%,93% 75%,50% 100%,7% 75%,7% 25%);
+      display: flex; align-items: center; justify-content: center;
+      background: var(--tension);
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .node-diamond-shape {
+      width: 38px; height: 38px;
+      transform: rotate(45deg);
+      background: var(--resolve);
+      display: flex; align-items: center; justify-content: center;
+      flex-shrink: 0;
+    }
+    .node-diamond-shape span { transform: rotate(-45deg); font-size: .9rem; }
+
+    .node-info strong {
+      display: block;
+      font-family: var(--heading);
+      font-size: .88rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+    .node-info span {
+      font-size: .75rem;
+      color: var(--ink40);
+    }
+
+    /* ---- Layer cards ---- */
+    .layer-cards {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 14px;
+      margin-bottom: 32px;
+    }
+
+    .layer-card {
+      background: var(--surface);
+      border-radius: var(--r-lg);
+      padding: 28px 24px;
+    }
+
+    .layer-card-num {
+      font-family: var(--mono);
+      font-size: .6rem;
+      letter-spacing: .08em;
+      color: var(--ink40);
+      margin-bottom: 10px;
+    }
+
+    .layer-card h3 {
+      font-family: var(--heading);
+      font-size: 1.15rem;
+      font-weight: 700;
+      color: var(--ink);
+      margin-bottom: 10px;
+    }
+
+    .layer-card p {
+      font-size: .85rem;
+      color: var(--ink60);
+      line-height: 1.65;
+    }
+
+    .layer-card.gap { border-top: 3px solid var(--tension); }
+    .layer-card.compass { border-top: 3px solid var(--resolve); }
+
+    /* ---- Steps ---- */
+    .steps {
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      margin-bottom: 32px;
+    }
+
+    .step {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      background: var(--surface);
+      border-radius: var(--r-sm);
+      padding: 18px 20px;
+    }
+
+    .step-num {
+      font-family: var(--mono);
+      font-size: .7rem;
+      font-weight: 500;
+      color: var(--amber);
+      min-width: 24px;
+      padding-top: 2px;
+    }
+
+    .step-body strong {
+      display: block;
+      font-family: var(--heading);
+      font-size: .9rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 4px;
+    }
+
+    .step-body p {
+      font-size: .83rem;
+      color: var(--ink60);
+      line-height: 1.6;
+    }
+
+    /* ---- Colour chips ---- */
+    .colour-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+      gap: 10px;
+    }
+
+    .colour-chip {
+      background: var(--surface);
+      border-radius: var(--r-md);
+      overflow: hidden;
+    }
+
+    .chip-swatch {
+      height: 52px;
+    }
+
+    .chip-info {
+      padding: 12px 14px;
+    }
+
+    .chip-info strong {
+      display: block;
+      font-family: var(--heading);
+      font-size: .82rem;
+      font-weight: 600;
+      color: var(--ink);
+      margin-bottom: 2px;
+    }
+
+    .chip-info span {
+      font-family: var(--mono);
+      font-size: .65rem;
+      color: var(--ink40);
+    }
+
+    /* ---- Divider ---- */
+    .guide-divider {
+      border: none;
+      border-top: 1px solid var(--ink20);
+      margin: 56px 0;
+    }
+
+    @media (max-width: 640px) {
+      .guide-wrap { padding: 40px 20px 80px; }
+      .symbol-row { grid-template-columns: 1fr; }
+      .symbol-key { border-right: none; border-bottom: 1px solid var(--ink20); }
+      .layer-cards { grid-template-columns: 1fr; }
+      .guide-nav { padding: 0 20px; }
+    }
+  </style>
+</head>
+<body>
+
+  <nav class="guide-nav">
+    <span class="guide-nav-brand">Cast Away <span>·</span> Navigator</span>
+    <a href="../" class="back-link">← Return to map</a>
+  </nav>
+
+  <div class="guide-wrap">
+
+    <!-- Header -->
+    <header class="guide-header">
+      <p class="guide-eyebrow">IPL Ecosystem Map · Reading Guide</p>
+      <h1>How to read<br/>this map</h1>
+      <p>The canvas is not an illustration — it makes an argument made spatial. Every symbol, colour, and motion pattern carries meaning. This page decodes it.</p>
+    </header>
+
+    <!-- Canvas World -->
+    <section class="guide-section" id="canvas-world">
+      <p class="section-label">01 — Canvas World</p>
+      <h2>The Visual World</h2>
+      <p>The background canvas is the argument. Zones, vessels, and wave layers represent the structural conditions that produce the gap between education and industry — before any character speaks.</p>
+
+      <div class="symbol-list">
+
+        <div class="symbol-row">
+          <div class="symbol-key">
+            <div class="symbol-name">Star Island</div>
+            <span class="symbol-tag tag-amber">Academic Zone</span>
+          </div>
+          <div class="symbol-val">
+            Star shape with amber glow, 6-second floating cycle. The academic world: internally coherent, generative on its own terms. The bob animation shows it is alive — but its motion is self-contained. It does not drift toward the archipelago.
+          </div>
+        </div>
+
+        <div class="symbol-row">
+          <div class="symbol-key">
+            <div class="symbol-name">Linh's Ship</div>
+            <span class="symbol-tag tag-amber">Single vessel</span>
+          </div>
+          <div class="symbol-val">
+            One vessel departing Star Island — larger, slower, built for a long journey rather than rapid manoeuvre. The ship represents Linh specifically: a graduating student crossing the Digital Media Ocean toward an industry she has not yet navigated. The ship is alone on the crossing. There is no fleet.
+          </div>
+        </div>
+
+        <div class="symbol-row">
+          <div class="symbol-key">
+            <div class="symbol-name">Industry Hub</div>
+            <span class="symbol-tag tag-slate">Archipelago</span>
+          </div>
+          <div class="symbol-val">
+            5–7 islands with a 7.5-second float cycle, offset 3 seconds from Star Island. Industry is not a single destination — it is a dispersed landscape of agencies, studios, and roles. The phase offset means the two worlds are never floating in sync: they move at different rhythms, neither waiting for the other.
+          </div>
+        </div>
+
+        <div class="symbol-row">
+          <div class="symbol-key">
+            <div class="symbol-name">10 Boats</div>
+            <span class="symbol-tag tag-slate">Industry vessels</span>
+          </div>
+          <div class="symbol-val">
+            Small, fast boats in and around the Industry Hub. They belong to the industry side — purpose-built for short crossings between islands. They represent the pace culture Tom describes: rapid deployment, multi-directional, iterating between clients and formats without pause. The boats are not waiting to receive Linh's ship. They are already in motion, working a different scale of water.
+          </div>
+        </div>
+
+        <div class="symbol-row">
+          <div class="symbol-key">
+            <div class="symbol-name">Ship vs. Boats</div>
+            <span class="symbol-tag tag-ink">Core contrast</span>
+          </div>
+          <div class="symbol-val">
+            The contrast is the argument. Linh's vessel is built for depth and distance; the industry boats are built for speed and range. Neither is the wrong kind of boat — they are vessels designed for different waters. The curriculum's job is not to replace the ship with a boat, but to give Linh the capacity to navigate once she arrives at an archipelago built for smaller, faster craft.
+          </div>
+        </div>
+
+        <div class="symbol-row">
+          <div class="symbol-key">
+            <div class="symbol-name">Ocean Waves</div>
+            <span class="symbol-tag tag-ink">6-layer SVG</span>
+          </div>
+          <div class="symbol-val">
+            Two groups of waves scroll in opposing directions at 9 s and 14 s cycles. The gap has depth and competing currents. Parallax layering signals that the Digital Media Ocean is not a flat distance but a layered system in motion — the same water Linh's ship is crossing, and that the industry boats have always known.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <hr class="guide-divider" />
+
+    <!-- The Two Layers -->
+    <section class="guide-section" id="layers">
+      <p class="section-label">02 — Navigation</p>
+      <h2>The Two Layers</h2>
+      <p>The nav bar at the top switches between two readings of the same map. Each layer asks a different question.</p>
+
+      <div class="layer-cards">
+        <div class="layer-card gap">
+          <div class="layer-card-num">Layer 1</div>
+          <h3>The Gap</h3>
+          <p>Shows the situation as it stands. Linh's ship is stuck near Star Island. Three storm nodes occupy the ocean between her and the Industry Hub. Click any node to read the conflict it names.</p>
+        </div>
+        <div class="layer-card compass">
+          <div class="layer-card-num">Layer 2</div>
+          <h3>The Compass</h3>
+          <p>Shows the structural response. Three solution nodes replace the storms. Each has a slider — drag it toward 100% to apply the intervention and watch the connection between Linh and Tom strengthen. Linh's ship advances as solutions are applied.</p>
+        </div>
+      </div>
+    </section>
+
+    <hr class="guide-divider" />
+
+    <!-- Nodes -->
+    <section class="guide-section" id="nodes">
+      <p class="section-label">03 — Nodes</p>
+      <h2>Reading the Nodes</h2>
+      <p>Each shape on the map is a node. Shape and colour encode the node's type before you click it.</p>
+
+      <div class="node-diagram">
+
+        <div class="node-sample">
+          <div class="node-dot amber">L</div>
+          <div class="node-info">
+            <strong>Character — Linh</strong>
+            <span>Amber circle · academic world</span>
+          </div>
+        </div>
+
+        <div class="node-sample">
+          <div class="node-dot slate">T</div>
+          <div class="node-info">
+            <strong>Character — Tom</strong>
+            <span>Slate circle · industry world</span>
+          </div>
+        </div>
+
+        <div class="node-sample">
+          <div class="node-hex-shape">⚡</div>
+          <div class="node-info">
+            <strong>Storm — Tension</strong>
+            <span>Red hexagon · a named gap</span>
+          </div>
+        </div>
+
+        <div class="node-sample">
+          <div class="node-diamond-shape"><span>✦</span></div>
+          <div class="node-info">
+            <strong>Solution — Intervention</strong>
+            <span>Green diamond · an IPL response</span>
+          </div>
+        </div>
+
+      </div>
+
+      <div class="symbol-list">
+
+        <div class="symbol-row">
+          <div class="symbol-key">
+            <div class="symbol-name">Storm Hexagon ⚡</div>
+            <span class="symbol-tag tag-red">Layer 1</span>
+          </div>
+          <div class="symbol-val">
+            Each storm names a structural mismatch: The Velocity Gap (pacing), The Agility Gap (specialisation vs versatility), and The Beautiful Ship Gap (aesthetic purity vs client outcomes). Click to read the conflict in full.
+          </div>
+        </div>
+
+        <div class="symbol-row">
+          <div class="symbol-key">
+            <div class="symbol-name">Solution Diamond ✦</div>
+            <span class="symbol-tag tag-green">Layer 2</span>
+          </div>
+          <div class="symbol-val">
+            Each diamond is an IPL intervention that directly resolves one storm. AI-Assisted Divergent Sprints, Industry-Integrated Critique, and Cross-Cultural Hackathons. Drag the slider inside the panel to 100% to fully apply it.
+          </div>
+        </div>
+
+        <div class="symbol-row">
+          <div class="symbol-key">
+            <div class="symbol-name">Lightning lines</div>
+            <span class="symbol-tag tag-red">Tension connections</span>
+          </div>
+          <div class="symbol-val">
+            Zigzag lines connect Linh and Tom to each storm in Layer 1. The jagged path signals active friction — the same distance, rendered as disruption rather than connection.
+          </div>
+        </div>
+
+        <div class="symbol-row">
+          <div class="symbol-key">
+            <div class="symbol-name">Curved arcs</div>
+            <span class="symbol-tag tag-green">Solution paths</span>
+          </div>
+          <div class="symbol-val">
+            Smooth arcs connect Linh and Tom through each solution node in Layer 2. Arc brightness and thickness increase as the slider moves toward 100% — the connection becomes visible as the intervention is applied.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <hr class="guide-divider" />
+
+    <!-- Page Chrome -->
+    <section class="guide-section" id="chrome">
+      <p class="section-label">04 — Interface</p>
+      <h2>Page Chrome</h2>
+      <p>The fixed interface elements outside the canvas also carry meaning. None are decorative.</p>
+
+      <div class="symbol-list">
+
+        <div class="symbol-row">
+          <div class="symbol-key">
+            <div class="symbol-name">Concept Note</div>
+            <span class="symbol-tag tag-ink">Canvas overlay</span>
+          </div>
+          <div class="symbol-val">
+            The small note card pinned to the canvas surface. In Layer 1 it reads "Three storms block the crossing" — in Layer 2 it reads "Three solutions clear the path." It frames the narrative register of each layer without appearing in the nav bar.
+          </div>
+        </div>
+
+        <div class="symbol-row">
+          <div class="symbol-key">
+            <div class="symbol-name">Compass Rose</div>
+            <span class="symbol-tag tag-ink">Orientation</span>
+          </div>
+          <div class="symbol-val">
+            A nautical compass fixed to the canvas. It marks this as a map to be navigated, not a diagram to be read. It does not point north — it anchors the register of the entire visual world.
+          </div>
+        </div>
+
+        <div class="symbol-row">
+          <div class="symbol-key">
+            <div class="symbol-name">Map Legend</div>
+            <span class="symbol-tag tag-ink">Toggle visible</span>
+          </div>
+          <div class="symbol-val">
+            A compact key listing node types. Opens and closes via the legend toggle. Provides quick reference for readers who encounter the map without this Navigator page.
+          </div>
+        </div>
+
+      </div>
+    </section>
+
+    <hr class="guide-divider" />
+
+    <!-- Colour System -->
+    <section class="guide-section" id="colour">
+      <p class="section-label">05 — Colour</p>
+      <h2>Colour System</h2>
+      <p>Each colour belongs to one zone or state. They do not overlap. Reading a colour correctly tells you whose world you are in and what is happening there.</p>
+
+      <div class="colour-grid">
+        <div class="colour-chip">
+          <div class="chip-swatch" style="background: #c97d38;"></div>
+          <div class="chip-info">
+            <strong>Amber</strong>
+            <span>Academic world · Star Island · Linh</span>
+          </div>
+        </div>
+        <div class="colour-chip">
+          <div class="chip-swatch" style="background: #3d7055;"></div>
+          <div class="chip-info">
+            <strong>Slate</strong>
+            <span>Industry world · Tom · Hub</span>
+          </div>
+        </div>
+        <div class="colour-chip">
+          <div class="chip-swatch" style="background: #b83520;"></div>
+          <div class="chip-info">
+            <strong>Tension red</strong>
+            <span>Active conflict · storms · wrong choice</span>
+          </div>
+        </div>
+        <div class="colour-chip">
+          <div class="chip-swatch" style="background: #2e6a44;"></div>
+          <div class="chip-info">
+            <strong>Resolve green</strong>
+            <span>Intervention applied · transform panel · resolution</span>
+          </div>
+        </div>
+        <div class="colour-chip">
+          <div class="chip-swatch" style="background: #c8e0ec;"></div>
+          <div class="chip-info">
+            <strong>Ocean blue</strong>
+            <span>The crossing · canvas background · the gap as space</span>
+          </div>
+        </div>
+        <div class="colour-chip">
+          <div class="chip-swatch" style="background: #1a1814;"></div>
+          <div class="chip-info">
+            <strong>Ink</strong>
+            <span>Text · neutral chrome · no allegiance</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="guide-divider" />
+
+    <!-- How to interact -->
+    <section class="guide-section" id="interact">
+      <p class="section-label">06 — Interaction</p>
+      <h2>How to use the map</h2>
+
+      <div class="steps">
+        <div class="step">
+          <span class="step-num">01</span>
+          <div class="step-body">
+            <strong>Explore Layer 1 — The Gap</strong>
+            <p>Click Linh, Tom, or any storm node to open the detail panel. Read who they are, what the conflict is, and what each character's direct quote reveals about their perspective.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-num">02</span>
+          <div class="step-body">
+            <strong>Switch to Layer 2 — The Compass</strong>
+            <p>Use the nav bar at the top. The storm nodes are replaced by three solution diamonds. The ocean connections are now potential paths, waiting to be activated.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-num">03</span>
+          <div class="step-body">
+            <strong>Click a solution node and read the intervention</strong>
+            <p>Each diamond opens a panel describing the IPL intervention — what it does, how it works, and what changes for Linh when it is applied.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-num">04</span>
+          <div class="step-body">
+            <strong>Drag the slider to 100%</strong>
+            <p>The slider inside each solution panel controls the intensity of the intervention. As you move it toward 100%, the arc between Linh and Tom brightens and Linh's ship advances across the ocean.</p>
+          </div>
+        </div>
+        <div class="step">
+          <span class="step-num">05</span>
+          <div class="step-body">
+            <strong>Apply all three solutions</strong>
+            <p>When all three sliders reach 100%, Linh's ship arrives at the Industry Hub. The Resolution panel opens — "The Adaptive Practitioner" — and Linh's reply to Tom becomes visible.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <hr class="guide-divider" />
+
+    <!-- Resolution -->
+    <section class="guide-section" id="resolution">
+      <p class="section-label">07 — Resolution</p>
+      <h2>The Adaptive Practitioner</h2>
+      <p>The conclusion is present from the start — rendered at low opacity, unreachable until all three interventions are applied. Nothing is added when it unlocks; the act of engaging with the system changes what was already there.</p>
+
+      <div class="symbol-list">
+        <div class="symbol-row">
+          <div class="symbol-key">
+            <div class="symbol-name">Bridge line</div>
+            <span class="symbol-tag tag-green">Animated</span>
+          </div>
+          <div class="symbol-val">
+            A line between Linh and Tom draws itself from nothing when the resolution unlocks. The gradient runs amber-to-green: from the student's world through the intervention space. It does not reach all the way to slate — the bridge lands at resolve, not at industry assimilation.
+          </div>
+        </div>
+        <div class="symbol-row">
+          <div class="symbol-key">
+            <div class="symbol-name">"Bridged" tag</div>
+            <span class="symbol-tag tag-green">Centre card</span>
+          </div>
+          <div class="symbol-val">
+            A status, not a claim. The artefact does not say the gap is closed. It says the three interventions together constitute a bridge — positioned between both character cards rather than belonging to either world.
+          </div>
+        </div>
+        <div class="symbol-row">
+          <div class="symbol-key">
+            <div class="symbol-name">Knowledge with Action</div>
+            <span class="symbol-tag tag-green">Resolution frame</span>
+          </div>
+          <div class="symbol-val">
+            The conclusion reframes the problem. Isolated academic knowledge, when scaffolded by targeted IPL interventions and ethical AI integration, becomes knowledge with action — bridging the classroom and the Asia-Pacific agency ecosystem.
+          </div>
+        </div>
+      </div>
+    </section>
+
+  </div><!-- /guide-wrap -->
+
+</body>
+</html>
