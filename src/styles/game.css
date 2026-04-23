@@ -119,16 +119,32 @@
 .nav-meta { min-width: 140px; text-align: right; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
 
 .nav-guide-link {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  padding: 6px 14px 6px 10px;
+  border-radius: var(--r-sm);
+  border: 1.5px solid var(--amber);
+  text-decoration: none;
+  transition: background .15s, border-color .15s;
+  margin-left: 6px;
+}
+.nav-guide-link:hover { background: var(--amber-light); }
+
+.nav-guide-icon {
+  font-size: .95rem;
+  color: var(--amber);
+  line-height: 1;
+}
+
+.nav-guide-text {
   font-family: var(--mono);
-  font-size: .6rem;
+  font-size: .65rem;
+  font-weight: 500;
   letter-spacing: .06em;
   text-transform: uppercase;
-  color: var(--amber);
-  text-decoration: none;
-  opacity: .7;
-  transition: opacity .15s;
+  color: var(--amber-dark);
 }
-.nav-guide-link:hover { opacity: 1; }
 
 .nav-hint {
   font-size: .73rem;

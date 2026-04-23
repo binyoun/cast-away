@@ -28,10 +28,13 @@ export default function LayerNav({ current, onChange, activeSolutions }) {
             <span className="nav-layer-sub">{l.sub}</span>
           </button>
         ))}
+        <a href="guide/" className="nav-guide-link">
+          <span className="nav-guide-icon">⊕</span>
+          <span className="nav-guide-text">Navigator</span>
+        </a>
       </div>
 
       <div className="nav-meta">
-        <a href="guide/" className="nav-guide-link">Navigator</a>
         {current === 2 ? (
           <span className={`solve-counter${active === 3 && avg >= 90 ? ' complete' : ''}`}>
             {active}/3 solutions · {avg}% avg
