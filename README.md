@@ -4,7 +4,7 @@
 
 An interactive scrollytelling artefact visualising the gap between design education and industry practice. A graduating student (Linh) meets a Creative Director (Tom) in a pitch room — the scenario plays out across three conflict zones, each requiring the reader to choose a structural intervention before the resolution unlocks.
 
-Built as a research artefact for TCHE2694 Integrated Project Learning at RMIT University Vietnam.
+Built for TCHE2694 Integrated Project Learning at RMIT University Vietnam. The scenario is grounded in situated learning (Lave & Wenger, 1991), activity theory (Leont'ev, 1978), and work-integrated learning (Billett, 2009).
 
 ---
 
