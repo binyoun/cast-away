@@ -499,9 +499,18 @@ function FinalOutcome({ activeSolutions, visible }) {
         {/* Body */}
         <div className="final-body">
           <p className="final-desc">
-            The system mismatch is resolved. When Tom delivers rapid, blunt feedback,
-            Linh no longer freezes. Operating with clear Theory of Mind, she has become
-            an Adaptive Practitioner — turning academic insight into industry value.
+            With scaffolded interventions, the system mismatch is resolved. When Tom delivers
+            rapid, blunt feedback, Linh does not freeze. She has become an Adaptive Practitioner.
+            Operating with clear Theory of Mind, she calmly replies:
+          </p>
+          <blockquote className="final-quote">
+            "Understood. If we use AI to quickly re-render the middle sequence with the brand's
+            primary palette and simplify the 3D assets, we can hit that target. Let's look at a
+            quick mockup."
+          </blockquote>
+          <p className="final-desc">
+            By ethically integrating AI and creating safe spaces for rapid iteration, we have
+            bridged the gap between the classroom and the Asia-Pacific agency ecosystem.
           </p>
         </div>
 

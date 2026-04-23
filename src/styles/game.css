@@ -1035,6 +1035,9 @@
   margin: 0;
 }
 
+.final-body .final-desc + .final-quote { margin-top: 10px; }
+.final-body .final-quote + .final-desc { margin-top: 10px; }
+
 .final-quote {
   font-size: .78rem;
   font-style: italic;
