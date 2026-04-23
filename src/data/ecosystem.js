@@ -72,11 +72,11 @@ export const NODES = {
     resolves: 'storm', solveIndex: 0,
     info: {
       type: 'IPL Intervention', title: 'AI-Assisted Divergent Sprints',
-      role: 'Lowering Attachment',
+      role: 'Lowering Attachment · Google Sprint Methodology',
       attrs: [
-        '1-Week Rapid Prototyping: AI generates multiple distinct conceptual directions for a single brief',
-        'Dismantling Ego: Teaches students not to treat their first draft as precious — avoiding the "Beautiful Ship" trap',
-        'Building Velocity: Develops the agile iteration speed required by modern agencies'
+        'Google Sprint Structure: Compressed diverge-and-converge cycles drawn from Google Sprint Methodology — multiple directions explored and tested within days, not weeks',
+        'Dismantling Ego: AI generates rough multi-format drafts rapidly, so students learn not to treat their first draft as precious — avoiding the "Beautiful Ship" trap',
+        'Building Velocity: Develops the agile iteration speed required by modern agencies — ship rough, select, then polish'
       ],
       quote: 'Linh now ships a brand board, reel frame, and deck mockup in one afternoon — then polishes the one the client picks.'
     }
