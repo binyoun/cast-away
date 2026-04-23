@@ -1,98 +1,72 @@
-/* base.css — variables, reset, typography */
+/* base.css — map-themed tokens — light mode */
 
 :root {
-  --bg:       #faf8f4;
-  --surface:  #f0ece4;
-  --surface2: #e8e3d8;
-  --ink:      #1a1814;
-  --ink80:    rgba(26,24,20,.8);
-  --ink60:    rgba(26,24,20,.6);
-  --ink40:    rgba(26,24,20,.4);
-  --ink20:    rgba(26,24,20,.2);
-  --ink10:    rgba(26,24,20,.1);
-  --ink06:    rgba(26,24,20,.06);
-  --border:   rgba(26,24,20,.1);
+  /* Ocean + land palette — daylight nautical */
+  --ocean:        #c8e0ec;
+  --ocean-deep:   #a8cce0;
+  --ocean-light:  #e0eff7;
+  --ocean-shore:  rgba(168,204,224,.4);
 
-  --amber:    #d4894a;
-  --amber-bg: rgba(212,137,74,.08);
-  --amber-border: rgba(212,137,74,.25);
-  --slate:    #4a6d8c;
-  --slate-bg: rgba(74,109,140,.08);
-  --slate-border: rgba(74,109,140,.25);
-  --tension:  #c0432a;
-  --tension-bg: rgba(192,67,42,.06);
-  --resolve:  #4a8c6a;
-  --resolve-bg: rgba(74,140,106,.08);
-  --resolve-border: rgba(74,140,106,.25);
+  --land-amber:   #d4a055;      /* academic island — warm sand */
+  --land-amber2:  #b8823a;
+  --land-amber-shore: rgba(212,160,85,.35);
+
+  --land-slate:   #5a9070;      /* industry island — sage/forest */
+  --land-slate2:  #3d7055;
+  --land-slate-shore: rgba(90,144,112,.35);
+
+  --ink:          #1a1814;
+  --ink80:        rgba(26,24,20,.8);
+  --ink60:        rgba(26,24,20,.6);
+  --ink40:        rgba(26,24,20,.4);
+  --ink20:        rgba(26,24,20,.2);
+  --ink10:        rgba(26,24,20,.1);
+
+  /* Accent */
+  --amber:        #c97d38;
+  --amber-light:  #f5e6d3;
+  --amber-mid:    #dba870;
+  --amber-dark:   #7a4a1e;
+
+  /* Tension / resolve */
+  --tension:      #b83520;
+  --tension-bg:   #fdf0ed;
+  --tension-mid:  #d4604a;
+  --resolve:      #2e6a44;
+  --resolve-bg:   #e8f5ee;
+  --resolve-mid:  #5a9e78;
+  --resolve-light:#a8d8bc;
+
+  /* Industry node colour */
+  --slate:       #3d7055;
+  --slate-light: rgba(90,144,112,.18);
+  --slate-dark:  #2a5040;
+
+  --surface:  #ffffff;
+  --surface2: #f0f4f2;
+  --card:     #ffffff;
 
   --heading: 'Space Grotesk', sans-serif;
-  --mono:    'JetBrains Mono', monospace;
   --body:    'Outfit', sans-serif;
+  --mono:    'JetBrains Mono', monospace;
 
-  --radius-sm: 8px;
-  --radius:    14px;
-  --radius-lg: 20px;
-  --shadow:    0 2px 12px rgba(26,24,20,.06), 0 1px 3px rgba(26,24,20,.04);
-  --shadow-md: 0 8px 32px rgba(26,24,20,.10), 0 2px 8px rgba(26,24,20,.06);
+  --r-sm: 8px;
+  --r-md: 14px;
+  --r-lg: 22px;
+  --r-xl: 28px;
+  --shadow-card: 0 4px 20px rgba(0,0,0,.08), 0 1px 4px rgba(0,0,0,.05);
+  --shadow-float: 0 12px 40px rgba(0,0,0,.12), 0 2px 8px rgba(0,0,0,.06);
 }
 
 *, *::before, *::after { margin: 0; padding: 0; box-sizing: border-box; }
-
-html { scroll-behavior: smooth; font-size: 15px; }
+html, body, #root      { height: 100%; overflow: hidden; }
 
 body {
-  background: var(--bg);
-  color: var(--ink);
+  background: var(--ocean);
   font-family: var(--body);
-  line-height: 1.65;
+  line-height: 1.6;
   -webkit-font-smoothing: antialiased;
-  overflow-x: hidden;
+  color: var(--ink);
 }
 
-::selection { background: rgba(212,137,74,.18); color: var(--ink); }
-
-::-webkit-scrollbar { width: 4px; }
-::-webkit-scrollbar-track { background: transparent; }
-::-webkit-scrollbar-thumb { background: var(--amber-border); border-radius: 2px; }
-
-/* Scroll reveal */
-.rv {
-  opacity: 0;
-  transform: translateY(20px);
-  transition: opacity .7s ease, transform .7s ease;
-}
-.rv.vis { opacity: 1; transform: translateY(0); }
-
-@media (prefers-reduced-motion: reduce) {
-  .rv { opacity: 1; transform: none; }
-}
-
-h1, h2, h3, h4 { font-family: var(--heading); line-height: 1.2; }
-h1 { font-size: clamp(2.4rem, 5vw, 4rem); font-weight: 700; letter-spacing: -.02em; }
-h2 { font-size: clamp(1.6rem, 3vw, 2.4rem); font-weight: 600; letter-spacing: -.015em; }
-h3 { font-size: clamp(1.1rem, 2vw, 1.35rem); font-weight: 600; letter-spacing: -.01em; }
-h4 { font-size: .8rem; font-weight: 600; letter-spacing: .08em; text-transform: uppercase; }
-
-p { font-size: 1rem; line-height: 1.7; color: var(--ink80); }
-
-.label {
-  font-family: var(--mono);
-  font-size: .7rem;
-  font-weight: 500;
-  letter-spacing: .1em;
-  text-transform: uppercase;
-  color: var(--ink40);
-}
-
-.chip {
-  display: inline-block;
-  font-family: var(--mono);
-  font-size: .68rem;
-  font-weight: 500;
-  letter-spacing: .04em;
-  padding: 3px 10px;
-  border-radius: 20px;
-  border: 1px solid var(--border);
-  background: var(--surface);
-  color: var(--ink60);
-}
+::selection { background: rgba(201,125,56,.25); color: var(--ink); }
