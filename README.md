@@ -42,8 +42,8 @@ GitHub Pages is configured to serve from the `main` branch `/docs` folder. No se
 
 ## Research context
 
-Part of the NTOR (Not The Only Road) research project within the rễ-root practice at RMIT University Vietnam. Theoretical grounding in situated learning (Lave & Wenger, 1991), activity theory (Leont'ev, 1978), and work-integrated learning (Billett, 2009).
+Part of the NTOR (Not The Only Road) research project at RMIT University Vietnam. Theoretical grounding in situated learning (Lave & Wenger, 1991), activity theory (Leont'ev, 1978), and work-integrated learning (Billett, 2009).
 
 ---
 
-*Bin Youn · RMIT University Vietnam · rễ-root · 2026*
+*Bin Youn · RMIT University Vietnam · 2026*
