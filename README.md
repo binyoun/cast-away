@@ -1,4 +1,4 @@
-# Cast Away
+# Cast Away: From Star Island to Industry Hub — IPL Ecosystem Map
 
 **Live:** https://binyoun.github.io/cast-away/
 
